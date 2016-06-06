@@ -10,4 +10,11 @@
         android:layout_height="match_parent"
         android:text="@string/about_item"
         android:textSize="20sp" />
+
+    <Button
+        android:layout_width="266dp"
+        android:layout_height="96dp"
+        android:text="New Button"
+        android:id="@+id/button"
+        android:layout_gravity="center_horizontal|top" />
 </FrameLayout>

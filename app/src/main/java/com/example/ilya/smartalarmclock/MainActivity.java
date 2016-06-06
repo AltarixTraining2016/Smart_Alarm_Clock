@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.ListViewAutoScrollHelper;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,16 +15,39 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.ilya.smartalarmclock.fragments.FragmentAbout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private ListView lvAlarm;
+    private AlarmListAdapter adapter;
+    private List<AlarmItem> nAlarmList;
     FragmentAbout fabout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        lvAlarm=(ListView)findViewById(R.id.listview_alarm);
+        nAlarmList=new ArrayList<>();
+        nAlarmList.add(new AlarmItem(1,"asfr","faf"));
+        nAlarmList.add(new AlarmItem(1,"asfr","faf"));
+        nAlarmList.add(new AlarmItem(1,"asfr","faf"));
+        nAlarmList.add(new AlarmItem(1,"asfr","faf"));
+        adapter=new AlarmListAdapter(getApplicationContext(),nAlarmList);
+        lvAlarm.setAdapter(adapter);
+        lvAlarm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(),"lalala",Toast.LENGTH_SHORT).show();
+            }
+        });
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
