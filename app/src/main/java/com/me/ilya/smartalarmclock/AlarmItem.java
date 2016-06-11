@@ -1,4 +1,4 @@
-package com.example.ilya.smartalarmclock;
+package com.me.ilya.smartalarmclock;
 
 /**
  * Created by Ilya on 6/6/2016.
@@ -8,7 +8,7 @@ public class AlarmItem {
     private String name;
     private String time;
 
-
+    public AlarmItem(){}
     public AlarmItem(int ID, String name, String time) {
         this.ID = ID;
         this.name = name;

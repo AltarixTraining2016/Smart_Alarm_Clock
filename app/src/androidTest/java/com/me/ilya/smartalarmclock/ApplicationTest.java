@@ -1,4 +1,4 @@
-package com.example.ilya.smartalarmclock;
+package com.me.ilya.smartalarmclock;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

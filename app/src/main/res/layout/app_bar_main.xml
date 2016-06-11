@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#d1d1d1"
+    android:background="#2657E0"
     android:fitsSystemWindows="true"
-    tools:context="com.example.ilya.smartalarmclock.MainActivity">
+    tools:context="com.me.ilya.smartalarmclock.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -23,16 +23,8 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main" />
-<ListView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/listview_alarm"
-    android:layout_marginTop="100dp"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:layout_marginBottom="100dp"
-    android:dividerHeight="10dp"
-    android:divider="#d1d1d1"></ListView>
+
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"

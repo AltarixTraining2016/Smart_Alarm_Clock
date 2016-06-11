@@ -1,4 +1,4 @@
-package com.example.ilya.smartalarmclock;
+package com.me.ilya.smartalarmclock;
 
 import org.junit.Test;
 
