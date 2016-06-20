@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="10dp"
@@ -13,7 +13,8 @@
     <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-
+       android:layout_marginTop="30dp"
+        android:layout_marginLeft="99dp"
     android:id="@+id/tv_name"
     android:text="Name"
     android:textSize="20dp"
@@ -23,7 +24,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+android:layout_marginTop="50dp"
         android:id="@+id/tv_days"
         android:text="Days"
         android:textSize="20dp"
@@ -32,15 +33,23 @@
         android:layout_alignParentStart="true"
         android:layout_marginStart="26dp" />
 
-    <ImageButton
+    <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:text="New Button"
-        android:id="@+id/ib_config"
+        android:id="@+id/turnOnImage"
         android:layout_gravity="right"
         android:layout_alignBottom="@+id/tv_days"
+        android:layout_toEndOf="@+id/tv_name"
+        android:layout_marginStart="75dp" />
+    <ImageView
+
+        android:id="@+id/show_context_menu"
+        android:layout_width="40dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="250dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="56dp" />
+        android:layout_alignParentRight="true"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -52,4 +61,6 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
-</RelativeLayout>
+
+
+</android.support.v7.widget.CardView>

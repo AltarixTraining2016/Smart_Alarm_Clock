@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SmartAlarmClock.iml" filepath="$PROJECT_DIR$/SmartAlarmClock.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Smart_Alarm_Clock.iml" filepath="$PROJECT_DIR$/Smart_Alarm_Clock.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

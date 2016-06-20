@@ -1,6 +1,7 @@
 package com.me.ilya.smartalarmclock;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,46 +16,33 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.me.ilya.smartalarmclock.fragments.FragmentAbout;
+
+import com.me.ilya.smartalarmclock.fragments.AlarmListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private ListView lvAlarm;
-    private AlarmListAdapter adapter;
     private List<AlarmItem> nAlarmList;
-    FragmentAbout fabout;
+
+    private static final String STATE_TITLE = "title";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        lvAlarm=(ListView)findViewById(R.id.listview_alarm);
-        nAlarmList=new ArrayList<>();
-        nAlarmList.add(new AlarmItem(1,"asfr","faf"));
-        nAlarmList.add(new AlarmItem(1,"asfr","faf"));
-        nAlarmList.add(new AlarmItem(1,"asfr","faf"));
-        nAlarmList.add(new AlarmItem(1,"asfr","faf"));
-        adapter=new AlarmListAdapter(getApplicationContext(),nAlarmList);
-        lvAlarm.setAdapter(adapter);
-        lvAlarm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),"lalala",Toast.LENGTH_SHORT).show();
-            }
-        });
+      // lvAlarm=(ListView)findViewById(R.id.listview_alarm);
+      // lvAlarm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      //     @Override
+      //     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+      //         Toast.makeText(getApplicationContext(),"lalala",Toast.LENGTH_SHORT).show();
+      //     }
+        //});
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
-        Button addAlarmbtn=(Button) findViewById(R.id.btn_addAlarm);
-        addAlarmbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -63,8 +51,12 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        if (savedInstanceState == null) {
+            replaceContent(AlarmListFragment.create());
+        } else {
+            setTitle(savedInstanceState.getString(STATE_TITLE));
+        }
 
-        fabout =new FragmentAbout();
     }
 
     @Override
@@ -118,11 +110,18 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }else if(id==R.id.nav_about){
-            fragmentTrans.replace(R.id.container,fabout);
+
         }fragmentTrans.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    private void replaceContent(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+        if (fragment instanceof Titleable) {
+            String title = ((Titleable) fragment).getTitle(this);
+            setTitle(title);
+        }
     }
 }

@@ -5,8 +5,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="about_text_3">Version %1$s (%2$s)</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="about_item">About</string>
+    <string name="about_title">About application</string>
+
+    <string name="menu_delete">Удалить</string>
 </resources>
