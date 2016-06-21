@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.me.ilya.smartalarmclock.AlarmClockApplication;
+import com.me.ilya.smartalarmclock.AlarmEditActivity;
 import com.me.ilya.smartalarmclock.AlarmItem;
 import com.me.ilya.smartalarmclock.CursorAdapter;
 import com.me.ilya.smartalarmclock.R;
@@ -25,7 +26,7 @@ import com.me.ilya.smartalarmclock.Titleable;
 /**
  * Created by Ilya on 6/15/2016.
  */
-public class AlarmListFragment  extends Fragment implements Titleable {
+public class    AlarmListFragment  extends Fragment implements Titleable {
 
     @Override
     public String getTitle(Context context) {
@@ -37,10 +38,20 @@ public class AlarmListFragment  extends Fragment implements Titleable {
     RecyclerView alarmListRecycleView;
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        ImageView addButton;
         View v = inflater.inflate(R.layout.alarm_list_fragment, container, false);
        alarmListRecycleView=(RecyclerView)v.findViewById(R.id.alarm_list);
+        addButton=(ImageView)v.findViewById(R.id.btn_addAlarm);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(AlarmEditActivity.intent(getContext()));
+            }
+        });
         return v;
     }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -50,7 +61,6 @@ public class AlarmListFragment  extends Fragment implements Titleable {
 
     }
     class ViewHolder extends RecyclerView.ViewHolder {
-
         TextView nameTextView;
         TextView daysTextView;
         TextView timeTextView;
@@ -83,6 +93,7 @@ public class AlarmListFragment  extends Fragment implements Titleable {
                     popup.show();
                 }
             });
+
         }
 
     }

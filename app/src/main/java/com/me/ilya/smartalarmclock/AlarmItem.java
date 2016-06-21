@@ -9,9 +9,9 @@ import java.util.Date;
  * Created by Ilya on 6/6/2016.
  */
 public class AlarmItem {
-   static private String ID;
-   static private String NAME;
-    static private String TIME;
+   static private String ID="id";
+   static private String NAME="name";
+    static private String TIME="time";
 
     public static String[] COLUMN_NAMES = {
             ID,

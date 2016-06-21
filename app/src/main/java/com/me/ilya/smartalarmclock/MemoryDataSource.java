@@ -33,6 +33,8 @@ public class MemoryDataSource implements DataSource {
         MatrixCursor c = new MatrixCursor(AlarmItem.COLUMN_NAMES);
         c.addRow(new Object[]{"1","aaa","10"});
         c.addRow(new Object[]{"2","aaea","10"});
+        c.addRow(new Object[]{"2","aaea","10"});
+        c.addRow(new Object[]{"2","aaea","10"});
         return c;
     }
 

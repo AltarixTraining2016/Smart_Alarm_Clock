@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private List<AlarmItem> nAlarmList;
 
+    private ActionBarDrawerToggle drawerToggle;
     private static final String STATE_TITLE = "title";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,25 +39,38 @@ public class MainActivity extends AppCompatActivity
       //         Toast.makeText(getApplicationContext(),"lalala",Toast.LENGTH_SHORT).show();
       //     }
         //});
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
         if (savedInstanceState == null) {
             replaceContent(AlarmListFragment.create());
         } else {
             setTitle(savedInstanceState.getString(STATE_TITLE));
         }
 
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerToggle= new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                //getActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                //getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+        };
+drawer.addDrawerListener(drawerToggle);
+
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -118,7 +132,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
     private void replaceContent(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_content, fragment).commit();
         if (fragment instanceof Titleable) {
             String title = ((Titleable) fragment).getTitle(this);
             setTitle(title);
