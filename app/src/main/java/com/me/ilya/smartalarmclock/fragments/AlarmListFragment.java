@@ -46,6 +46,7 @@ public class    AlarmListFragment  extends Fragment implements Titleable {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 startActivity(AlarmEditActivity.intent(getContext()));
             }
         });
