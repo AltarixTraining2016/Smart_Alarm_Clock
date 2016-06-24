@@ -10,7 +10,7 @@
                 android:width="1dp"
                 android:color="@color/colorBorder"/>
 
-            <solid android:color="#00FFFFFF" />
+            <solid android:color="@color/colorBorder" />
 
             <padding android:left="10dp"
                 android:right="10dp"

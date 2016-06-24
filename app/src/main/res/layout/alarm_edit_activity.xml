@@ -1,18 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     >
 
-    <TimePicker
+    <ImageView
+        android:id="@+id/accept_button"
+        android:layout_toStartOf="@+id/slice"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+    <TextView
 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/accept_button"
+        android:layout_alignTop="@+id/accept_button"
+        android:layout_alignRight="@+id/accept_button"
+        android:layout_alignBottom="@+id/accept_button"
+        android:layout_margin="1dp"
+        android:gravity="center"
+        android:text="Add Alarm  +"
+        android:textColor="@color/font_color" />
+    <ImageView
+        android:id="@+id/cancel_button"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_toEndOf="@+id/slice"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignStart="@+id/cancel_button"
+        android:layout_alignTop="@+id/cancel_button"
+        android:layout_alignEnd="@+id/cancel_button"
+        android:layout_alignBottom="@+id/cancel_button"
+        android:layout_margin="1dp"
+        android:gravity="center"
+        android:text="Add Alarm  +"
+        android:textColor="@color/font_color" />
+    <ImageView
+        android:id="@+id/slice"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/ic_launcher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_marginTop="-1dp"
+        android:id="@+id/time_background"
+        android:layout_width="match_parent"
+
+        android:layout_centerHorizontal="true"
+android:background="#85c1c4f7"
+        android:layout_below="@+id/cancel_button"
+        android:layout_height="wrap_content">
+    <TimePicker
+        android:layout_centerHorizontal="true"
         android:scrollbars="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/timePicker" />
+    </RelativeLayout>
     <ImageView
+        android:layout_below="@id/time_background"
+        android:src="@color/item_color"
         android:id="@+id/song_list"
-        android:src="@drawable/ic_menu_slideshow"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" >
+    </ImageView>
+    <TextView
+        android:id="@+id/myImageViewText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/song_list"
+        android:layout_alignTop="@id/song_list"
+        android:layout_alignRight="@id/song_list"
+        android:layout_alignBottom="@id/song_list"
+        android:layout_margin="1dp"
+        android:gravity="center"
+        android:text="Choose Music"
+        android:textColor="@color/font_color" />
+
+        <com.me.ilya.smartalarmclock.fragments.DaySwitcher
+            android:layout_below="@id/myImageViewText"
+            android:id="@+id/chk_mond"
+            android:background="@drawable/list_item_background"
+            android:layout_width="60dp"
+            android:layout_marginStart="10dp"
+
+            android:layout_height="60dp" />
+
+    <TextView
+        android:id="@+id/monday_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/chk_mond"
+        android:layout_alignTop="@id/chk_mond"
+        android:layout_alignEnd="@id/chk_mond"
+        android:layout_alignBottom="@id/chk_mond"
+        android:layout_margin="1dp"
+        android:gravity="center"
+        android:text="Пн"
+        android:textColor="@color/black" />
+    <com.me.ilya.smartalarmclock.fragments.DaySwitcher
+        android:id="@+id/chk_tue"
+        android:layout_below="@id/myImageViewText"
+        android:layout_toEndOf="@+id/chk_mond"
+        android:background="@drawable/list_item_background"
+        android:layout_marginStart="10dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+    <TextView
+        android:id="@+id/tuesdau_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/chk_tue"
+        android:layout_alignTop="@id/chk_tue"
+        android:layout_alignEnd="@id/chk_tue"
+        android:layout_alignBottom="@id/chk_tue"
+        android:layout_margin="1dp"
+        android:gravity="center"
+        android:text="Вт"
+        android:textColor="@color/black" />
+    <com.me.ilya.smartalarmclock.fragments.DaySwitcher
+        android:id="@+id/chk_wed"
+        android:layout_below="@id/myImageViewText"
+        android:layout_toEndOf="@+id/chk_tue"
+        android:background="@drawable/list_item_background"
+        android:layout_width="60dp"
+        android:layout_marginStart="10dp"
+        android:layout_height="60dp"/>
+    <TextView
+        android:id="@+id/wednesday_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/chk_wed"
+          android:layout_alignTop="@id/chk_wed"
+          android:layout_alignEnd="@id/chk_wed"
+       android:layout_alignBottom="@id/chk_wed"
+        android:layout_margin="1dp"
+        android:gravity="center"
+        android:text="Ср"
+        android:textColor="@color/black" />
+    <com.me.ilya.smartalarmclock.fragments.DaySwitcher
+        android:id="@+id/chk_thur"
+        android:layout_below="@id/myImageViewText"
+        android:layout_toEndOf="@+id/chk_wed"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/list_item_background"
+        android:layout_width="60dp"
+        android:layout_height="60dp"/>
+    <TextView
+        android:id="@+id/thursday_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+         android:layout_alignStart="@id/chk_thur"
+           android:layout_alignTop="@id/chk_thur"
+           android:layout_alignEnd="@id/chk_thur"
+        android:layout_alignBottom="@id/chk_thur"
+        android:layout_margin="1dp"
+        android:gravity="center"
+        android:text="Чт"
+        android:textColor="@color/black" />
+    <com.me.ilya.smartalarmclock.fragments.DaySwitcher
+        android:id="@+id/chk_frid"
+        android:layout_marginStart="10dp"
+        android:layout_below="@id/myImageViewText"
+        android:layout_toEndOf="@+id/chk_thur"
+        android:background="@drawable/list_item_background"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+    <TextView
+        android:id="@+id/friday_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/chk_frid"
+        android:layout_alignTop="@id/chk_frid"
+        android:layout_alignEnd="@id/chk_frid"
+        android:layout_alignBottom="@id/chk_frid"
+        android:layout_margin="1dp"
+        android:gravity="center"
+        android:text="Пт"
+        android:textColor="@color/black" />
+    <com.me.ilya.smartalarmclock.fragments.DaySwitcher
+        android:id="@+id/chk_sat"
+        android:layout_marginStart="10dp"
+        android:layout_below="@id/myImageViewText"
+        android:layout_toEndOf="@+id/chk_frid"
+        android:background="@drawable/list_item_background"
+        android:layout_width="60dp"
+        android:layout_height="60dp"/>
+    <TextView
+        android:id="@+id/saturday_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/chk_sat"
+        android:layout_alignTop="@id/chk_sat"
+        android:layout_alignEnd="@id/chk_sat"
+        android:layout_alignBottom="@id/chk_sat"
+        android:layout_margin="1dp"
+        android:gravity="center"
+        android:text="Сб"
+        android:textColor="@color/black" />
+    <com.me.ilya.smartalarmclock.fragments.DaySwitcher
+        android:id="@+id/chk_sun"
+        android:layout_below="@id/myImageViewText"
+        android:layout_toEndOf="@+id/chk_sat"
+        android:background="@drawable/list_item_background"
+        android:layout_marginStart="10dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+</RelativeLayout>

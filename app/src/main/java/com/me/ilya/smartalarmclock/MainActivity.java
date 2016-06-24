@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
       // lvAlarm=(ListView)findViewById(R.id.listview_alarm);
       // lvAlarm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       //     @Override
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         if (savedInstanceState == null) {
             replaceContent(AlarmListFragment.create());

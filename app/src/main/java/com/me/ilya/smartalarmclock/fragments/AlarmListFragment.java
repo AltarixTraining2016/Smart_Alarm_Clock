@@ -30,7 +30,7 @@ public class    AlarmListFragment  extends Fragment implements Titleable {
 
     @Override
     public String getTitle(Context context) {
-        return null;
+        return "fsddfdsdf";
     }
     public static AlarmListFragment create() {
         return new AlarmListFragment();

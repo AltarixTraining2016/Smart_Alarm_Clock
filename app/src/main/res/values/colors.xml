@@ -2,6 +2,17 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorBorder">#a05877ce</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="item_pressed">#5fff8a00</color>
+    <color name="item_focused">#eaff00</color>
+    <color name="button_default">#0a1c76bb</color>
+    <color name="colorBorder">#a0000000</color>
+    <color name="colorAccent">#5b92f1</color>
+    <color name="smf">#28ffffff</color>
+    <color name="black">#000000</color>
+
+    <color name="smf2">#ffffff</color>
+    <color name="item_color">#a0388bba</color>
+
+    <color name="font_color">#f1f1f1</color>
+
 </resources>
