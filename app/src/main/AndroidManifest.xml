@@ -26,7 +26,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".music.SongListActivity" />
-        <activity android:name=".AlarmEditActivity" />
+        <activity android:name=".AlarmEditActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

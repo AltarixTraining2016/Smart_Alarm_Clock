@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_checked="true"
-        android:drawable="@color/smf"/>
-    <item android:state_checked="false"
-        android:drawable="@color/smf2"/>
+<selector  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true"
+        android:drawable="@color/item_color_press"/>
+    <item
+
+        android:drawable="@color/item_color"/>
 
 
-    <item android:drawable="@color/font_color"/> <!-- default -->
-
+    <!-- default -->
 </selector>

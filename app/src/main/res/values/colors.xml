@@ -12,6 +12,7 @@
 
     <color name="smf2">#ffffff</color>
     <color name="item_color">#a0388bba</color>
+    <color name="item_color_press">#6fa3a5d2</color>
 
     <color name="font_color">#f1f1f1</color>
 

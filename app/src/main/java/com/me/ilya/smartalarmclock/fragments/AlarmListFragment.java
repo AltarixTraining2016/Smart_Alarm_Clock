@@ -56,12 +56,13 @@ public class    AlarmListFragment  extends Fragment implements Titleable {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Adapter adapter = new Adapter(getContext(), AlarmClockApplication.getDataSource().getAlarmItems());
+        Adapter adapter = new Adapter(getContext(), AlarmClockApplication.getDataSource().alarmItemsGet());
         alarmListRecycleView.setAdapter(adapter);
       alarmListRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
 
     }
     class ViewHolder extends RecyclerView.ViewHolder {
+        AlarmItem alarmItem;
         TextView nameTextView;
         TextView daysTextView;
         TextView timeTextView;
@@ -78,11 +79,13 @@ public class    AlarmListFragment  extends Fragment implements Titleable {
         }
 
         public void bind(final AlarmItem alarmItem) {
-            nameTextView.setText(alarmItem.getName());
+            this.alarmItem=alarmItem;
+            nameTextView.setText(this.alarmItem.getName());
+            timeTextView.setText(String.format(getString(R.string.alarm_time),alarmItem.getTimeHour(),alarmItem.getTimeMinute()));
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                //    startActivity(DeviceTypeEditActivity.intent(getContext(), deviceType));
+                    startActivity(AlarmEditActivity.intent(getContext(),alarmItem.getId()));
                 }
             });
             contextMenuImageView.setOnClickListener(new View.OnClickListener() {

@@ -12,7 +12,7 @@ public class AlarmClockApplication extends Application {
         return dataSource;
     }
     @Override
-    public void onCreate() {
+    public void onCreate(){
         super.onCreate();
         dataSource = MemoryDataSource.getInstance();
     }

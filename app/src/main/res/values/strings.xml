@@ -11,4 +11,7 @@
     <string name="about_title">About application</string>
 
     <string name="menu_delete">Удалить</string>
+
+
+    <string name="alarm_time">%1$s:%2$s</string>
 </resources>

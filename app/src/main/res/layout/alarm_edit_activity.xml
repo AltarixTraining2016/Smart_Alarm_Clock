@@ -61,8 +61,28 @@ android:background="#85c1c4f7"
         android:layout_height="wrap_content"
         android:id="@+id/timePicker" />
     </RelativeLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/alarm_name_wrapper"
+        android:textColorHint="@color/font_color"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/chk_mond"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/alarm_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Название будильника"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:textColorHint="@color/font_color"
+            android:textColor="@color/font_color"
+            android:maxLines="1" />
+
+    </android.support.design.widget.TextInputLayout>
     <ImageView
-        android:layout_below="@id/time_background"
+        android:layout_below="@id/alarm_name_wrapper"
         android:src="@color/item_color"
         android:id="@+id/song_list"
         android:layout_width="match_parent"
@@ -82,9 +102,9 @@ android:background="#85c1c4f7"
         android:textColor="@color/font_color" />
 
         <com.me.ilya.smartalarmclock.fragments.DaySwitcher
-            android:layout_below="@id/myImageViewText"
+            android:layout_below="@id/time_background"
             android:id="@+id/chk_mond"
-            android:background="@drawable/list_item_background"
+            android:background="@drawable/day_check_item"
             android:layout_width="60dp"
             android:layout_marginStart="10dp"
 
@@ -104,9 +124,9 @@ android:background="#85c1c4f7"
         android:textColor="@color/black" />
     <com.me.ilya.smartalarmclock.fragments.DaySwitcher
         android:id="@+id/chk_tue"
-        android:layout_below="@id/myImageViewText"
+        android:layout_below="@id/time_background"
         android:layout_toEndOf="@+id/chk_mond"
-        android:background="@drawable/list_item_background"
+        android:background="@drawable/day_check_item"
         android:layout_marginStart="10dp"
         android:layout_width="60dp"
         android:layout_height="60dp" />
@@ -124,9 +144,9 @@ android:background="#85c1c4f7"
         android:textColor="@color/black" />
     <com.me.ilya.smartalarmclock.fragments.DaySwitcher
         android:id="@+id/chk_wed"
-        android:layout_below="@id/myImageViewText"
+        android:layout_below="@id/time_background"
         android:layout_toEndOf="@+id/chk_tue"
-        android:background="@drawable/list_item_background"
+        android:background="@drawable/day_check_item"
         android:layout_width="60dp"
         android:layout_marginStart="10dp"
         android:layout_height="60dp"/>
@@ -144,10 +164,10 @@ android:background="#85c1c4f7"
         android:textColor="@color/black" />
     <com.me.ilya.smartalarmclock.fragments.DaySwitcher
         android:id="@+id/chk_thur"
-        android:layout_below="@id/myImageViewText"
+        android:layout_below="@id/time_background"
         android:layout_toEndOf="@+id/chk_wed"
         android:layout_marginStart="10dp"
-        android:background="@drawable/list_item_background"
+        android:background="@drawable/day_check_item"
         android:layout_width="60dp"
         android:layout_height="60dp"/>
     <TextView
@@ -165,9 +185,9 @@ android:background="#85c1c4f7"
     <com.me.ilya.smartalarmclock.fragments.DaySwitcher
         android:id="@+id/chk_frid"
         android:layout_marginStart="10dp"
-        android:layout_below="@id/myImageViewText"
+        android:layout_below="@id/time_background"
         android:layout_toEndOf="@+id/chk_thur"
-        android:background="@drawable/list_item_background"
+        android:background="@drawable/day_check_item"
         android:layout_width="60dp"
         android:layout_height="60dp" />
     <TextView
@@ -185,9 +205,9 @@ android:background="#85c1c4f7"
     <com.me.ilya.smartalarmclock.fragments.DaySwitcher
         android:id="@+id/chk_sat"
         android:layout_marginStart="10dp"
-        android:layout_below="@id/myImageViewText"
+        android:layout_below="@id/time_background"
         android:layout_toEndOf="@+id/chk_frid"
-        android:background="@drawable/list_item_background"
+        android:background="@drawable/day_check_item"
         android:layout_width="60dp"
         android:layout_height="60dp"/>
     <TextView
@@ -204,10 +224,28 @@ android:background="#85c1c4f7"
         android:textColor="@color/black" />
     <com.me.ilya.smartalarmclock.fragments.DaySwitcher
         android:id="@+id/chk_sun"
-        android:layout_below="@id/myImageViewText"
+        android:layout_below="@id/time_background"
         android:layout_toEndOf="@+id/chk_sat"
-        android:background="@drawable/list_item_background"
+        android:background="@drawable/day_check_item"
         android:layout_marginStart="10dp"
         android:layout_width="60dp"
         android:layout_height="60dp" />
+    <TextView
+        android:id="@+id/sunday_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@id/chk_sun"
+        android:layout_alignTop="@id/chk_sun"
+        android:layout_alignEnd="@id/chk_sun"
+        android:layout_alignBottom="@id/chk_sun"
+        android:layout_margin="1dp"
+        android:gravity="center"
+        android:text="Вс"
+        android:textColor="@color/black" />
+    <TextView
+        android:id="@+id/edit_song_name"
+        android:layout_below="@+id/song_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 </RelativeLayout>

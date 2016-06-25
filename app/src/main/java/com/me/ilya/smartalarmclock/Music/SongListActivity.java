@@ -12,7 +12,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.RadioButton;
 
+import com.me.ilya.smartalarmclock.AlarmClockApplication;
+import com.me.ilya.smartalarmclock.AlarmItem;
 import com.me.ilya.smartalarmclock.R;
 
 import java.util.ArrayList;
@@ -25,13 +29,25 @@ import java.util.Comparator;
 public class SongListActivity extends AppCompatActivity {
     private ArrayList<Song> songList;
     private RecyclerView songView;
+
+    private int alarmId;
+    private final static String EXTRA_ALARM_ID = "alarm_id";
     public static Intent intent(Context context) {
         return new Intent(context, SongListActivity.class);
     }
+
+    public static Intent intent(Context context, int deviceId) {
+        Intent intent = new Intent(context, SongListActivity.class);
+        intent.putExtra(EXTRA_ALARM_ID, deviceId);
+        return intent;
+    }
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.song_list_activity);
+        alarmId = getIntent().getIntExtra(EXTRA_ALARM_ID,-1);
+
+
         songView=(RecyclerView)findViewById(R.id.song_recycler_view);
         songList = new ArrayList<Song>();
         getSongList();
@@ -41,9 +57,12 @@ public class SongListActivity extends AppCompatActivity {
             }
         });
         songView.setLayoutManager(new LinearLayoutManager(this));
-        SongListAdapter songListAdapter=new SongListAdapter(songList,getApplicationContext());
+        SongListAdapter songListAdapter=new SongListAdapter(songList,getApplicationContext(),alarmId,this);
         songView.setAdapter(songListAdapter);
     }
+
+
+
     public void getSongList() {
         ContentResolver musicResolver = getContentResolver();
         Uri musicUri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -54,15 +73,15 @@ public class SongListActivity extends AppCompatActivity {
                     (android.provider.MediaStore.Audio.Media.TITLE);
             int idColumn = musicCursor.getColumnIndex
                     (android.provider.MediaStore.Audio.Media._ID);
-            int artistColumn = musicCursor.getColumnIndex
+            int lengthColumn = musicCursor.getColumnIndex
                     (MediaStore.Audio.Media.DURATION);
              int uri=musicCursor.getColumnIndex(MediaStore.Audio.Media.DATA);
             //add songs to list
             do {
                 long thisId = musicCursor.getLong(idColumn);
                 String thisTitle = musicCursor.getString(titleColumn);
-                String thisArtist = musicCursor.getString(artistColumn);
-                songList.add(new Song(thisId, thisTitle, thisArtist,musicCursor.getString(uri)));
+                String thisLength = musicCursor.getString(lengthColumn);
+                songList.add(new Song(thisId, thisTitle,musicCursor.getString(uri),thisLength));
             }
             while (musicCursor.moveToNext());
         }
