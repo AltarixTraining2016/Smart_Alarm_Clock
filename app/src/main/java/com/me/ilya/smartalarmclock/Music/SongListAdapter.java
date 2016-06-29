@@ -2,9 +2,8 @@ package com.me.ilya.smartalarmclock.music;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaPlayer;
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.me.ilya.smartalarmclock.AlarmClockApplication;
+import com.me.ilya.smartalarmclock.main.AlarmClockApplication;
 import com.me.ilya.smartalarmclock.AlarmItem;
 import com.me.ilya.smartalarmclock.R;
 
@@ -78,7 +77,10 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
                         mpintro.stop();
                         mpintro.release();
                     mpintro=null;}
-                    mActivity.setResult(Activity.RESULT_OK);
+                    Intent intent=new Intent();
+                    intent.putExtra("song",song);
+                    mActivity.setResult(Activity.RESULT_OK,intent);
+
                      mActivity.finish();
 
                 }

@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_back"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/list_item_background"
     android:layout_gravity="center"
+    android:descendantFocusability="blocksDescendants"
+    android:contextClickable="true"
     android:layout_marginBottom="5dp"
     >
    <!--- <LinearLayout
@@ -76,6 +79,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:visibility="invisible"
             android:fontFamily="serif"
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
@@ -87,8 +91,21 @@
             android:text="00 : 00"
             android:textSize="50dp"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-
         <TextView
+            android:visibility="invisible"
+            android:fontFamily="serif"
+            android:id="@+id/tv_time_unabled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textColor="@color/unabled_font_color"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="00 : 00"
+            android:textSize="50dp"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <TextView
+            android:visibility="invisible"
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -103,6 +120,22 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
+            android:visibility="invisible"
+            android:id="@+id/unabled_tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_time"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_toLeftOf="@+id/turnOnImage"
+            android:layout_toRightOf="@+id/tv_time"
+
+            android:textColor="@color/unabled_font_color"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:visibility="invisible"
             android:id="@+id/tv_days"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -112,26 +145,48 @@
             android:textColor="@color/font_color"
             android:text="S"
             android:textAppearance="?android:attr/textAppearanceSmall" />
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/unabled_tv_days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/tv_time"
 
+            android:textColor="@color/unabled_font_color"
+            android:text="S"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <ImageView
-
+            android:layout_marginTop="15dp"
             android:id="@+id/show_context_menu"
-            android:layout_width="wrap_content"
-            android:src="@mipmap/ic_launcher"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:src="@drawable/dots"
+            android:layout_height="50dp"
 android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:text="ToggleButton" />
-        <ImageView
-            android:id="@+id/turnOnImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.me.ilya.smartalarmclock.main.OnButton
+            android:visibility="invisible"
+            android:layout_marginEnd="10dp"
+            android:id="@+id/turnOffImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_toLeftOf="@+id/show_context_menu"
-            android:src="@mipmap/ic_launcher"
+            android:background="@drawable/back_cross_button"
             android:layout_alignParentTop="true"
-
+            android:layout_marginTop="15dp"
             android:text="ToggleButton" />
-
+        <com.me.ilya.smartalarmclock.main.OnButton
+            android:visibility="invisible"
+            android:layout_marginEnd="10dp"
+            android:id="@+id/turnOnImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_toLeftOf="@+id/show_context_menu"
+            android:background="@drawable/on_button_enabled"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="15dp"
+            android:text="ToggleButton" />
     </RelativeLayout>
 </FrameLayout>

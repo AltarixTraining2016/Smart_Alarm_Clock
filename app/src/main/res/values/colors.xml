@@ -3,17 +3,22 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="item_pressed">#5fff8a00</color>
-    <color name="item_focused">#eaff00</color>
     <color name="button_default">#0a1c76bb</color>
     <color name="colorBorder">#a0000000</color>
-    <color name="colorAccent">#5b92f1</color>
-    <color name="smf">#28ffffff</color>
+    <color name="colorAccent">#d2679bf5</color>
+    <color name="item_focused">#28ffffff</color>
+    <color name="unabled_item_focused">#17eaeaea</color>
     <color name="black">#000000</color>
 
     <color name="smf2">#ffffff</color>
     <color name="item_color">#a0388bba</color>
+    <color name="unabled_item_color">#3c95b1c1</color>
     <color name="item_color_press">#6fa3a5d2</color>
 
     <color name="font_color">#f1f1f1</color>
+    <color name="unabled_font_color">#c2c2c2</color>
+
+    <color name="cross_button_color">#45beff</color>
+
 
 </resources>

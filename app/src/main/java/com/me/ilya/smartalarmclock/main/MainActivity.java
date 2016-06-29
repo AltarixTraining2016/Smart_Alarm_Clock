@@ -1,4 +1,4 @@
-package com.me.ilya.smartalarmclock;
+package com.me.ilya.smartalarmclock.main;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,15 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
 
 
-import com.me.ilya.smartalarmclock.fragments.AlarmListFragment;
+import com.me.ilya.smartalarmclock.AlarmItem;
+import com.me.ilya.smartalarmclock.R;
+import com.me.ilya.smartalarmclock.Titleable;
+import com.me.ilya.smartalarmclock.main.AlarmListFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity

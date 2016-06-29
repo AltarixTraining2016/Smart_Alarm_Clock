@@ -6,7 +6,6 @@ import android.database.MatrixCursor;
 import com.me.ilya.smartalarmclock.music.Song;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,10 +23,10 @@ public class MemoryDataSource implements DataSource {
     private List<AlarmItem> alarmItemList = new ArrayList<>();
     private List<Song> songList=new ArrayList<>();
     private MemoryDataSource() {
-       alarmItemList.add(new AlarmItem(0,"Работа",  13,45));
-       alarmItemList.add(new AlarmItem(1,"выходной",13,45));
-       alarmItemList.add(new AlarmItem(2,"",        13,45));
-       alarmItemList.add(new AlarmItem(3,"",        13,45));
+       alarmItemList.add(new AlarmItem(0,"Работа",  13,45,Song.DEFAULT()));
+       alarmItemList.add(new AlarmItem(1,"выходной",13,45,Song.DEFAULT()));
+       alarmItemList.add(new AlarmItem(2,"",        13,45,Song.DEFAULT()));
+       alarmItemList.add(new AlarmItem(3,"",        13,45,Song.DEFAULT()));
     }
 
 
@@ -39,20 +38,24 @@ public class MemoryDataSource implements DataSource {
                     AlarmItem d = iterator.next();
                     if (d.getId() == alarmItem.getId()) {
                         iterator.remove();
-                        if(alarmItem.getSong()!=null) newAlarmItem = new AlarmItem(d.getId(), alarmItem.getName(),alarmItem.getTimeHour(),alarmItem.getTimeMinute(),alarmItem.getSong());
-                      else newAlarmItem = new AlarmItem(d.getId(), alarmItem.getName(),alarmItem.getTimeHour(),alarmItem.getTimeMinute());
+                        if(alarmItem.getSong()!=null){
+                            newAlarmItem = new AlarmItem(d.getId(), alarmItem.getName(),alarmItem.getTimeHour(),alarmItem.getTimeMinute(),alarmItem.getSong(),alarmItem.getDays(),alarmItem.isEnabled());
+                        }
+
+                      else
+                            newAlarmItem = new AlarmItem(d.getId(), alarmItem.getName(),alarmItem.getTimeHour(),alarmItem.getTimeMinute(),alarmItem.isEnabled());
                         break;
                     }
                 }
                 if (newAlarmItem == null) {
-                    newAlarmItem = new AlarmItem(alarmItem.getId(), alarmItem.getName(),alarmItem.getTimeHour(),alarmItem.getTimeMinute());
+                    newAlarmItem = new AlarmItem(alarmItem.getId(), alarmItem.getName(),alarmItem.getTimeHour(),alarmItem.getTimeMinute(),alarmItem.getSong(),alarmItem.getDays(),alarmItem.isEnabled());
+
                 }
             }
             if (newAlarmItem == null) {
-                newAlarmItem = new AlarmItem(alarmItemList.size(), alarmItem.getName(),alarmItem.getTimeHour(),alarmItem.getTimeMinute());
+                newAlarmItem = new AlarmItem(alarmItemList.size(), alarmItem.getName(),alarmItem.getTimeHour(),alarmItem.getTimeMinute(),alarmItem.getSong(),alarmItem.getDays(),alarmItem.isEnabled());
             }
             alarmItemList.add(newAlarmItem);
-
     }
 
     @Override
@@ -71,7 +74,12 @@ public class MemoryDataSource implements DataSource {
 
     @Override
     public void deleteAlarmItem(int id) {
-
+        for (Iterator<AlarmItem> iterator = alarmItemList.iterator(); iterator.hasNext(); ) {
+            AlarmItem alarmItem= iterator.next();
+            if (alarmItem.getId() == id) {
+                iterator.remove();
+            }
+        }
     }
 
     @Override

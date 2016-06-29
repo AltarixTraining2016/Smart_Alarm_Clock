@@ -1,6 +1,9 @@
-package com.me.ilya.smartalarmclock;
+package com.me.ilya.smartalarmclock.main;
 
 import android.app.Application;
+
+import com.me.ilya.smartalarmclock.DataSource;
+import com.me.ilya.smartalarmclock.MemoryDataSource;
 
 /**
  * Created by Ilya on 6/17/2016.

@@ -9,14 +9,9 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.RadioButton;
 
-import com.me.ilya.smartalarmclock.AlarmClockApplication;
-import com.me.ilya.smartalarmclock.AlarmItem;
 import com.me.ilya.smartalarmclock.R;
 
 import java.util.ArrayList;

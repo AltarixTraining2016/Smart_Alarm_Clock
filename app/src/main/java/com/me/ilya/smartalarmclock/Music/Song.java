@@ -10,7 +10,8 @@ import com.me.ilya.smartalarmclock.Dto;
  * Created by Ilya on 6/22/2016.
  */
 public class Song extends Dto{
-
+  public   static final String DEFAULT_TITLE="Default";
+    public static final String DEFAULT_URI="content://media/internal/audio/media/10";
     static final String _ID = "_id";
     static final String TITLE = "title";
     static final String PATH= "path";
@@ -19,6 +20,11 @@ public class Song extends Dto{
             TITLE,
             PATH
     };
+    public Song(Song s){
+        id=s.getID();
+        title=s.getName();
+        uri=s.getUri();
+    }
     public static Song fromCursor(Cursor cursor) {
         int id = cursor.getInt(cursor.getColumnIndex(_ID));
         String title = cursor.getString(cursor.getColumnIndex(TITLE));
@@ -26,6 +32,9 @@ public class Song extends Dto{
         return new Song(id,title,path);
     }
 
+    public static Song DEFAULT(){
+        return new Song(1,DEFAULT_TITLE,DEFAULT_URI);
+    }
     private long id;
     private String title;
    private String uri;
@@ -50,5 +59,9 @@ public class Song extends Dto{
     public String getLength(){return length;}
     public void addToCursor(MatrixCursor c) {
         c.addRow(new Object[]{id,title,uri,length });
+    }
+    @Override
+    public String toString() {
+        return title +" "+ uri;
     }
 }

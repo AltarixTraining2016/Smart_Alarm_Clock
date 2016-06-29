@@ -1,29 +1,21 @@
-package com.me.ilya.smartalarmclock.fragments;
+package com.me.ilya.smartalarmclock.main;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Checkable;
-import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import com.me.ilya.smartalarmclock.R;
 
 /**
- * Created by Ilya on 6/24/2016.
+ * Created by Ilya on 6/27/2016.
  */
-public class DaySwitcher  extends ImageView implements Checkable, View.OnClickListener {
+public class OnButton extends ImageView implements Checkable{
     private boolean mChecked;
 
     private static final int[] CHECKED_STATE_SET = { android.R.attr.state_checked };
 
-    public DaySwitcher(final Context context, final AttributeSet attrs) {
+    public OnButton(final Context context, final AttributeSet attrs) {
         super(context, attrs);
-        setOnClickListener(this);
     }
 
     @Override
@@ -52,8 +44,4 @@ public class DaySwitcher  extends ImageView implements Checkable, View.OnClickLi
         refreshDrawableState();
     }
 
-    @Override
-    public void onClick(View v) {
-        toggle();
-    }
 }

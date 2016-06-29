@@ -9,14 +9,14 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
 
-        android:name=".AlarmClockApplication"
+        android:name=".main.AlarmClockApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/application_image"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.me.ilya.smartalarmclock.MainActivity"
+            android:name=".main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

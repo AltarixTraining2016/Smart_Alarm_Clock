@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_checked="true"
-        android:drawable="@color/smf2"/>
+        android:drawable="@drawable/back_cross_button"/>
     <item android:state_checked="false"
-        android:drawable="@color/item_focused"/>
+        android:drawable="@drawable/ic_menu_camera"/>
 
 
-    <item android:drawable="@color/font_color"/> <!-- default -->
+    <item android:drawable="@drawable/ic_menu_camera"/> <!-- default -->
 
 </selector>

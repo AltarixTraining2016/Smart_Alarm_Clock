@@ -84,7 +84,7 @@ public abstract class CursorAdapter<VH extends RecyclerView.ViewHolder>
             if (mDataSetObserver != null) {
                 mCursor.registerDataSetObserver(mDataSetObserver);
             }
-            mRowIdColumn = newCursor.getColumnIndexOrThrow("_id");
+            mRowIdColumn = newCursor.getColumnIndexOrThrow("id");
             mDataValid = true;
             notifyDataSetChanged();
         } else {
@@ -100,6 +100,7 @@ public abstract class CursorAdapter<VH extends RecyclerView.ViewHolder>
         public void onChanged() {
             super.onChanged();
             mDataValid = true;
+            notifyDataSetChanged();
             notifyDataSetChanged();
         }
 

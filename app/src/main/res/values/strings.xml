@@ -14,4 +14,12 @@
 
 
     <string name="alarm_time">%1$s:%2$s</string>
+
+    <string name="monday"> Пн </string>
+    <string name="tuesday"> Вт </string>
+    <string name="wednesday"> Ср </string>
+    <string name="thursday"> Чт </string>
+    <string name="friday"> Пт </string>
+    <string name="saturday"> Сб </string>
+    <string name="sunday"> Вс </string>
 </resources>
