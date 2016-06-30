@@ -43,7 +43,7 @@ public class MemoryDataSource implements DataSource {
                         }
 
                       else
-                            newAlarmItem = new AlarmItem(d.getId(), alarmItem.getName(),alarmItem.getTimeHour(),alarmItem.getTimeMinute(),alarmItem.isEnabled());
+                            newAlarmItem = new AlarmItem(d.getId(),   alarmItem.getName(),alarmItem.getTimeHour(),alarmItem.getTimeMinute(),alarmItem.isEnabled());
                         break;
                     }
                 }
