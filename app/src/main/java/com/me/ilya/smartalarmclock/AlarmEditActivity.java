@@ -150,7 +150,7 @@ public class AlarmEditActivity extends AppCompatActivity {
             if (alarmItem.getDay(dayOfWeek - 1) && dayOfWeek >= nowDay &&
                     !(dayOfWeek == nowDay && alarmItem.getTimeHour() < nowHour) &&
                     !(dayOfWeek == nowDay && alarmItem.getTimeHour() == nowHour && alarmItem.getTimeMinute() <= nowMinute)) {
-                calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+                 calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
                 setAlarm(context, calendar, pIntent);
                 alarmSet = true;
                 break;
