@@ -13,10 +13,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.me.ilya.smartalarmclock.main.AlarmClockApplication;
 import com.me.ilya.smartalarmclock.music.Song;
 import com.me.ilya.smartalarmclock.music.SongListActivity;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -136,6 +139,40 @@ public class AlarmEditActivity extends AppCompatActivity {
         newAlarmItem.setDay(AlarmItem.SATURDAY, chekSaturday.isChecked());
         newAlarmItem.setDay(AlarmItem.SUNDAY, chekSunday.isChecked());
         AlarmClockApplication.getDataSource().alarmItemChange(newAlarmItem);
+
+
+        final int nowDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        final int nowHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        final int nowMinute = Calendar.getInstance().get(Calendar.MINUTE);
+        boolean alarmSet = false;
+
+        for (int dayOfWeek = 1; dayOfWeek <= 7; ++dayOfWeek) {
+            if (alarmItem.getDay(dayOfWeek - 1) && dayOfWeek >= nowDay &&
+                    !(dayOfWeek == nowDay && alarmItem.getTimeHour() < nowHour) &&
+                    !(dayOfWeek == nowDay && alarmItem.getTimeHour() == nowHour && alarmItem.getTimeMinute() <= nowMinute)) {
+                calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+                setAlarm(context, calendar, pIntent);
+                alarmSet = true;
+                break;
+            }
+        }
+
+        //Else check if it's earlier in the week
+        if (!alarmSet) {
+            for (int dayOfWeek = Calendar.SUNDAY; dayOfWeek <= Calendar.SATURDAY; ++dayOfWeek) {
+                if (alarmItem.getDay(dayOfWeek - 1) && dayOfWeek <= nowDay){
+                    calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+                    calendar.add(Calendar.WEEK_OF_YEAR, 1);
+                    setAlarm(context, calendar, pIntent);
+                    alarmSet = true;
+                    break;
+                }
+            }
+        }
+
+
+
+        Toast.makeText(this,"lala",Toast.LENGTH_LONG).show();
         setResult(RESULT_OK);
         finish();
     }

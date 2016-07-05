@@ -11,6 +11,7 @@ import java.util.Arrays;
  * Created by Ilya on 6/6/2016.
  */
 public class AlarmItem {
+    static private String TABLE_NAME = "alarm";
     static private String ID = "id";
     static private String NAME = "name";
     static private String TIME_HOUR = "time_hour";
@@ -21,6 +22,7 @@ public class AlarmItem {
 
     public static String[] COLUMN_NAMES = {
             ID,
+            TABLE_NAME,
             NAME,
             TIME_HOUR,
             TIME_MINUTE,

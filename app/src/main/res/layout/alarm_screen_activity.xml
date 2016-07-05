@@ -10,7 +10,7 @@
         android:id="@+id/alarm_screen_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <ImageView
+    <Button
         android:id="@+id/stop_playing"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

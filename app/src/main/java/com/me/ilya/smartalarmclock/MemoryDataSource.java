@@ -67,6 +67,13 @@ public class MemoryDataSource implements DataSource {
         return c;
     }
 
+    private void sorting(){
+        ArrayList<AlarmItem> enabledList=new ArrayList<>();
+        for(AlarmItem alarmItem  :alarmItemList){
+            if(alarmItem.isEnabled())enabledList.add(alarmItem);
+        }
+        AlarmItem alarmItem=null;
+    }
     @Override
     public void addAlarmItem(AlarmItem alarmItem) {
 

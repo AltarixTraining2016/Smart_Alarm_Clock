@@ -28,6 +28,7 @@ import com.me.ilya.smartalarmclock.R;
 import com.me.ilya.smartalarmclock.Titleable;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,6 +71,11 @@ public class AlarmListFragment extends Fragment implements Titleable {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
+
+
+
+
+            Toast.makeText(getContext(),"")
             adapter.swapCursor(AlarmClockApplication.getDataSource().alarmItemsGet());
         }
     }
