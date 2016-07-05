@@ -142,7 +142,7 @@ public class AlarmEditActivity extends AppCompatActivity {
 
 
         final int nowDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-        final int nowHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)  ;
+        final int nowHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)   ;
         final int nowMinute = Calendar.getInstance().get(Calendar.MINUTE);
         boolean alarmSet = false;
 
