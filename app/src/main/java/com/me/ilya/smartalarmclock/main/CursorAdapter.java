@@ -1,4 +1,4 @@
-package com.me.ilya.smartalarmclock;
+package com.me.ilya.smartalarmclock.main;
 
 import android.content.Context;
 import android.database.Cursor;

@@ -11,7 +11,6 @@ import java.util.Arrays;
  * Created by Ilya on 6/6/2016.
  */
 public class AlarmItem {
-    static private String TABLE_NAME = "alarm";
     static private String ID = "id";
     static private String NAME = "name";
     static private String TIME_HOUR = "time_hour";
@@ -22,7 +21,6 @@ public class AlarmItem {
 
     public static String[] COLUMN_NAMES = {
             ID,
-            TABLE_NAME,
             NAME,
             TIME_HOUR,
             TIME_MINUTE,
@@ -38,13 +36,13 @@ public class AlarmItem {
     private final boolean days[];
     private  final boolean enabled;
 
-    public static final int MONDAY = 0;
-    public static final int TUESDAY = 1;
-    public static final int WEDNESDAY = 2;
-    public static final int THURSDAY = 3;
-    public static final int FRDIAY = 4;
-    public static final int SATURDAY = 5;
-    public static final int SUNDAY = 6;
+    public static final int SUNDAY = 0;
+    public static final int MONDAY = 1;
+    public static final int TUESDAY =2;
+    public static final int WEDNESDAY = 3;
+    public static final int THURSDAY = 4;
+    public static final int FRDIAY = 5;
+    public static final int SATURDAY = 6;
 
     public void addToCursor(MatrixCursor cursor) {
         cursor.addRow(new Object[]{id, name, timeHour, timeMinute, song, Boolean.toString(days[0]) + " " +

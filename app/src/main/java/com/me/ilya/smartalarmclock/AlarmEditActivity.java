@@ -46,6 +46,7 @@ public class AlarmEditActivity extends AppCompatActivity {
     @BindView(R.id.chk_sun)
     DaySwitcher chekSunday;
 
+
     @BindView(R.id.alarm_name)
     EditText alarmNameEditText;
     TimePicker tp;
@@ -71,11 +72,18 @@ public class AlarmEditActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-           song= (Song) data.getSerializableExtra("song");
+            song = (Song) data.getSerializableExtra("song");
             editSongName.setText(song.getName());
         }
         //if(AlarmClockApplication.getDataSource().getAlarmById(alarmId).getSong()!=null)
         //editSongName.setText(AlarmClockApplication.getDataSource().getAlarmById(alarmId).getSong().getName());
+    }
+
+
+    @OnClick(R.id.cancel_button)
+    public void cancelClick() {
+        setResult(RESULT_CANCELED);
+        finish();
     }
 
     @Override
@@ -91,7 +99,7 @@ public class AlarmEditActivity extends AppCompatActivity {
         if (alarmId != -1) {
             alarmItem = AlarmClockApplication.getDataSource().getAlarmById(alarmId);
             if (alarmItem != null) {
-                song=alarmItem.getSong();
+                song = alarmItem.getSong();
                 alarmNameEditText.setText(alarmItem.getName());
                 tp.setCurrentMinute(alarmItem.getTimeMinute());
                 tp.setCurrentHour(alarmItem.getTimeHour());
@@ -113,7 +121,8 @@ public class AlarmEditActivity extends AppCompatActivity {
         });
 
     }
-    private void setDays(){
+
+    private void setDays() {
         chekMonday.setChecked(alarmItem.getDay(AlarmItem.MONDAY));
         chekTuesday.setChecked(alarmItem.getDay(AlarmItem.TUESDAY));
         chekWednesday.setChecked(alarmItem.getDay(AlarmItem.WEDNESDAY));
@@ -122,6 +131,7 @@ public class AlarmEditActivity extends AppCompatActivity {
         chekSaturday.setChecked(alarmItem.getDay(AlarmItem.SATURDAY));
         chekSunday.setChecked(alarmItem.getDay(AlarmItem.SUNDAY));
     }
+
     private void startAct() {
         startActivityForResult(SongListActivity.intent(AlarmEditActivity.this, alarmId), 0);
     }
@@ -130,7 +140,7 @@ public class AlarmEditActivity extends AppCompatActivity {
     @OnClick(R.id.accept_button)
     public void accept() {
 
-         AlarmItem newAlarmItem = new AlarmItem(alarmId, alarmNameEditText.getText().toString(), tp.getCurrentHour(), tp.getCurrentMinute(), song);
+        AlarmItem newAlarmItem = new AlarmItem(alarmId, alarmNameEditText.getText().toString(), tp.getCurrentHour(), tp.getCurrentMinute(), song);
         newAlarmItem.setDay(AlarmItem.MONDAY, chekMonday.isChecked());
         newAlarmItem.setDay(AlarmItem.TUESDAY, chekTuesday.isChecked());
         newAlarmItem.setDay(AlarmItem.WEDNESDAY, chekWednesday.isChecked());
@@ -141,38 +151,46 @@ public class AlarmEditActivity extends AppCompatActivity {
         AlarmClockApplication.getDataSource().alarmItemChange(newAlarmItem);
 
 
-        final int nowDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-        final int nowHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)    ;
-        final int nowMinute = Calendar.getInstance().get(Calendar.MINUTE);
-        boolean alarmSet = false;
+        //    final int nowDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+        //    final int nowHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        //    final int nowMinute = Calendar.getInstance().get(Calendar.MINUTE);
+        //    boolean alarmSet = false;
+//
+        //    for (int dayOfWeek = 1; dayOfWeek <= 7; ++dayOfWeek) {
+        //        if (alarmItem.getDay(dayOfWeek - 1) && dayOfWeek >= nowDay &&
+        //                !(dayOfWeek == nowDay && alarmItem.getTimeHour() < nowHour) &&
+        //                !(dayOfWeek == nowDay && alarmItem.getTimeHour() == nowHour && alarmItem.getTimeMinute() <= nowMinute)) {
+        //             calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+        //            setAlarm(context, calendar, pIntent);
+        //            alarmSet = true;
+        //            break;
+        //        }
+        //    }
+//
+        //    //Else check if it's earlier in the week
+        //    if (!alarmSet) {
+        //        for (int dayOfWeek = Calendar.SUNDAY; dayOfWeek <= Calendar.SATURDAY; ++dayOfWeek) {
+        //            if (alarmItem.getDay(dayOfWeek - 1) && dayOfWeek <= nowDay){
+        //                calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+        //                calendar.add(Calendar.WEEK_OF_YEAR, 1);
+        //                setAlarm(context, calendar, pIntent);
+        //                alarmSet = true;
+        //                break;
+        //            }
+        //        }
+        //    }
+        String[] str;
+        StringBuilder sb = new StringBuilder();
+        sb.append("Будильник сработает через: ");
+        if (alarmId == -1)
+            str = AlarmManagerHelper.setAlarms(this, AlarmClockApplication.getDataSource().getAlarms().size() - 1).split(" ");
+        else str = AlarmManagerHelper.setAlarms(this, alarmId).split(" ");
 
-        for (int dayOfWeek = 1; dayOfWeek <= 7; ++dayOfWeek) {
-            if (alarmItem.getDay(dayOfWeek - 1) && dayOfWeek >= nowDay &&
-                    !(dayOfWeek == nowDay && alarmItem.getTimeHour() < nowHour) &&
-                    !(dayOfWeek == nowDay && alarmItem.getTimeHour() == nowHour && alarmItem.getTimeMinute() <= nowMinute)) {
-                 calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-                setAlarm(context, calendar, pIntent);
-                alarmSet = true;
-                break;
-            }
-        }
-
-        //Else check if it's earlier in the week
-        if (!alarmSet) {
-            for (int dayOfWeek = Calendar.SUNDAY; dayOfWeek <= Calendar.SATURDAY; ++dayOfWeek) {
-                if (alarmItem.getDay(dayOfWeek - 1) && dayOfWeek <= nowDay){
-                    calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-                    calendar.add(Calendar.WEEK_OF_YEAR, 1);
-                    setAlarm(context, calendar, pIntent);
-                    alarmSet = true;
-                    break;
-                }
-            }
-        }
-
-
-
-        Toast.makeText(this,"lala",Toast.LENGTH_LONG).show();
+        if (str.length > 3) sb.append(str[3]).append("д. ");
+        if (str.length > 2) sb.append(str[2]).append("ч. ");
+        if (str.length > 1) sb.append(str[1]).append("мин. ");
+        if (str.length > 0) sb.append(str[0]).append("сек. ");
+        Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
         setResult(RESULT_OK);
         finish();
     }

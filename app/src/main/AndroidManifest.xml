@@ -28,6 +28,16 @@
         <activity android:name=".music.SongListActivity" />
         <activity android:name=".AlarmEditActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <service android:name=".AlarmService"
+            android:enabled="true"/>
+
+        <receiver android:name=".AlarmManagerHelper" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".AlarmScreen" />
     </application>
 
 </manifest>

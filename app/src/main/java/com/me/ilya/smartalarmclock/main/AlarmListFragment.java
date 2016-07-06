@@ -19,16 +19,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.me.ilya.smartalarmclock.AlarmEditActivity;
 import com.me.ilya.smartalarmclock.AlarmItem;
-import com.me.ilya.smartalarmclock.CursorAdapter;
+import com.me.ilya.smartalarmclock.AlarmManagerHelper;
 import com.me.ilya.smartalarmclock.R;
 import com.me.ilya.smartalarmclock.Titleable;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,7 +71,6 @@ public class AlarmListFragment extends Fragment implements Titleable {
 
 
 
-            Toast.makeText(getContext(),"")
             adapter.swapCursor(AlarmClockApplication.getDataSource().alarmItemsGet());
         }
     }
@@ -211,33 +206,32 @@ public class AlarmListFragment extends Fragment implements Titleable {
 
         private void setDays() {
             StringBuilder stringBuilder = new StringBuilder();
-            for (int i = AlarmItem.MONDAY; i <= AlarmItem.SUNDAY; i++) {
+            for (int i = AlarmItem.MONDAY; i <= AlarmItem.SATURDAY; i++) {
                 if (alarmItem.getDay(i)) {
                     switch (i) {
-                        case 0:
+                        case 1:
                             stringBuilder.append(getString(R.string.monday)).append(" ");
                             break;
-                        case 1:
+                        case 2:
                             stringBuilder.append(getString(R.string.tuesday)).append(" ");
                             break;
-                        case 2:
+                        case 3:
                             stringBuilder.append(getString(R.string.wednesday)).append(" ");
                             break;
-                        case 3:
+                        case 4:
                             stringBuilder.append(getString(R.string.thursday)).append(" ");
                             break;
-                        case 4:
+                        case 5:
                             stringBuilder.append(getString(R.string.friday)).append(" ");
                             break;
-                        case 5:
+                        case 6:
                             stringBuilder.append(getString(R.string.saturday)).append(" ");
                             break;
-                        case 6:
-                            stringBuilder.append(getString(R.string.sunday)).append(" ");
-                            break;
+
                     }
                 }
             }
+            if(alarmItem.getDay(AlarmItem.SUNDAY)) stringBuilder.append(getString(R.string.sunday)).append(" ");
             daysTextView.setText(stringBuilder.toString());
             unabledDays.setText(stringBuilder.toString());
         }
@@ -255,7 +249,6 @@ public class AlarmListFragment extends Fragment implements Titleable {
             //       this.parent=parent;
             return new ViewHolder(parent);
         }
-
         @Override
         public void onBindViewHolder(final ViewHolder viewHolder, final Cursor cursor) {
             final AlarmItem alarmItem = AlarmItem.fromCursor(cursor);//как
@@ -265,17 +258,22 @@ public class AlarmListFragment extends Fragment implements Titleable {
             viewHolder.onButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    AlarmManagerHelper.cancelAlarms(getContext());
                     AlarmItem newAlarmItem = new AlarmItem(alarmItem.getId(), alarmItem.getName(), alarmItem.getTimeHour(), alarmItem.getTimeMinute(), alarmItem.getSong(), alarmItem.getDays(), !alarmItem.isEnabled());
                     AlarmClockApplication.getDataSource().alarmItemChange(newAlarmItem);
                     swapCursor(AlarmClockApplication.getDataSource().alarmItemsGet());
+                    AlarmManagerHelper.setAlarms(getContext());
                 }
             });
             viewHolder.turnOffButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    AlarmManagerHelper.cancelAlarms(getContext());
                     AlarmItem newAlarmItem = new AlarmItem(alarmItem.getId(), alarmItem.getName(), alarmItem.getTimeHour(), alarmItem.getTimeMinute(), alarmItem.getSong(), alarmItem.getDays(), !alarmItem.isEnabled());
                     AlarmClockApplication.getDataSource().alarmItemChange(newAlarmItem);
                     swapCursor(AlarmClockApplication.getDataSource().alarmItemsGet());
+                    AlarmManagerHelper.setAlarms(getContext());
                 }
             });
         }

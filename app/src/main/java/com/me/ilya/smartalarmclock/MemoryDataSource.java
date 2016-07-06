@@ -88,7 +88,14 @@ public class MemoryDataSource implements DataSource {
             }
         }
     }
-
+    @Override
+public ArrayList<AlarmItem> getAlarms(){
+ArrayList<AlarmItem> alarmItems=new ArrayList<>();
+    for(AlarmItem alarmItem  :alarmItemList){
+       alarmItems.add(alarmItem);
+    }
+    return alarmItems;
+}
     @Override
     public AlarmItem getAlarmById(int id) {
         AlarmItem result = null;

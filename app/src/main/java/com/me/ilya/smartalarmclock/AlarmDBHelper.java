@@ -17,19 +17,20 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "alarmclock.db";
+    public static final String TABLE_NAME = "alarm";
 
-    private static final String SQL_CREATE_ALARM = "CREATE TABLE " + AlarmItem.COLUMN_NAMES[0]+ " (" +
-            AlarmItem.COLUMN_NAMES[1] + " INTEGER PRIMARY KEY AUTOINCREMENT," +//id
-            AlarmItem.COLUMN_NAMES[2] + " TEXT," +//name
-            AlarmItem.COLUMN_NAMES[3]+ " INTEGER," +//hour
-            AlarmItem.COLUMN_NAMES[4] + " INTEGER," +//minute
-            AlarmItem.COLUMN_NAMES[5] + " TEXT," +//song
-            AlarmItem.COLUMN_NAMES[6]+ " TEXT," +//days
-            AlarmItem.COLUMN_NAMES[7] + " BOOLEAN" +
+    private static final String SQL_CREATE_ALARM = "CREATE TABLE " +TABLE_NAME + " (" +
+            AlarmItem.COLUMN_NAMES[0] + " INTEGER PRIMARY KEY AUTOINCREMENT," +//id
+            AlarmItem.COLUMN_NAMES[1] + " TEXT," +//name
+            AlarmItem.COLUMN_NAMES[2]+ " INTEGER," +//hour
+            AlarmItem.COLUMN_NAMES[3] + " INTEGER," +//minute
+            AlarmItem.COLUMN_NAMES[4] + " TEXT," +//song
+            AlarmItem.COLUMN_NAMES[5]+ " TEXT," +//days
+            AlarmItem.COLUMN_NAMES[6] + " BOOLEAN" +
             " )";
 
     private static final String SQL_DELETE_ALARM =
-            "DROP TABLE IF EXISTS " +  AlarmItem.COLUMN_NAMES[0];
+            "DROP TABLE IF EXISTS " +  TABLE_NAME ;
 
     public AlarmDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -52,34 +53,34 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
 
     private ContentValues populateContent(AlarmItem alarmItem){
         ContentValues values = new ContentValues();
-        values.put(AlarmItem.COLUMN_NAMES[2],alarmItem.getName());
-        values.put(AlarmItem.COLUMN_NAMES[3], alarmItem.getTimeHour());
-        values.put(AlarmItem.COLUMN_NAMES[4],alarmItem.getTimeMinute());
-        values.put(AlarmItem.COLUMN_NAMES[5], alarmItem.getSong().getUri());
+        values.put(AlarmItem.COLUMN_NAMES[1],alarmItem.getName());
+        values.put(AlarmItem.COLUMN_NAMES[2], alarmItem.getTimeHour());
+        values.put(AlarmItem.COLUMN_NAMES[3],alarmItem.getTimeMinute());
+        values.put(AlarmItem.COLUMN_NAMES[4], alarmItem.getSong().getUri());
         String repeatingDays = "";
         for (int i = 0; i < 7; ++i) {
             repeatingDays +=alarmItem.getDay(i) + ",";
         }
-        values.put(AlarmItem.COLUMN_NAMES[6], repeatingDays);
-        values.put(AlarmItem.COLUMN_NAMES[7],alarmItem.isEnabled());
+        values.put(AlarmItem.COLUMN_NAMES[5], repeatingDays);
+        values.put(AlarmItem.COLUMN_NAMES[6],alarmItem.isEnabled());
 
         return values;
     }
 
     public long createAlarm(AlarmItem alarmItem){
         ContentValues values = populateContent(alarmItem);
-        return getWritableDatabase().insert(AlarmItem.COLUMN_NAMES[0], null, values);
+        return getWritableDatabase().insert(TABLE_NAME , null, values);
     }
 
     public long updateAlarm(AlarmItem alarmItem) {
         ContentValues values = populateContent(alarmItem);
-        return getWritableDatabase().update(AlarmItem.COLUMN_NAMES[0], values,AlarmItem.COLUMN_NAMES[1] + " = ?", new String[] { String.valueOf(alarmItem.getId()) });
+        return getWritableDatabase().update(TABLE_NAME , values,AlarmItem.COLUMN_NAMES[0] + " = ?", new String[] { String.valueOf(alarmItem.getId()) });
     }
 
     public AlarmItem getAlarm(long id){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String select = "SELECT * FROM " + AlarmItem.COLUMN_NAMES[0] + " WHERE " + AlarmItem.COLUMN_NAMES[1]+ " = " + id;
+        String select = "SELECT * FROM " +TABLE_NAME + " WHERE " + AlarmItem.COLUMN_NAMES[0]+ " = " + id;
 
         Cursor c = db.rawQuery(select, null);
 
@@ -93,7 +94,7 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
     public List<AlarmItem> getAlarms() {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String select = "SELECT * FROM " + AlarmItem.COLUMN_NAMES[0];
+        String select = "SELECT * FROM " + TABLE_NAME ;
 
         Cursor c = db.rawQuery(select, null);
 
@@ -111,6 +112,6 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
     }
 
     public int deleteAlarm(long id) {
-        return getWritableDatabase().delete(AlarmItem.COLUMN_NAMES[0], AlarmItem.COLUMN_NAMES[1]+ " = ?", new String[] { String.valueOf(id) });
+        return getWritableDatabase().delete(TABLE_NAME , AlarmItem.COLUMN_NAMES[0]+ " = ?", new String[] { String.valueOf(id) });
     }
 }

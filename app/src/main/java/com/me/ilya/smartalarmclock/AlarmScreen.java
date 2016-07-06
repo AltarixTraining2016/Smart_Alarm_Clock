@@ -59,7 +59,7 @@ public class AlarmScreen extends Activity {
         try {
             if (tone != null && !tone.equals("")) {
                     mPlayer.setDataSource(tone);
-                    mPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+             //       mPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
                     mPlayer.setLooping(true);
                     mPlayer.prepare();
                     mPlayer.start();
