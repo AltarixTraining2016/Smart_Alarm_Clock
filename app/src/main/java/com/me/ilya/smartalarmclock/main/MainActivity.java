@@ -14,6 +14,7 @@ import android.view.MenuItem;
 
 
 import com.me.ilya.smartalarmclock.AlarmItem;
+import com.me.ilya.smartalarmclock.AlarmManagerHelper;
 import com.me.ilya.smartalarmclock.R;
 import com.me.ilya.smartalarmclock.Titleable;
 import com.me.ilya.smartalarmclock.main.AlarmListFragment;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AlarmManagerHelper.setAlarms(this);
         setContentView(R.layout.activity_main);
 
       // lvAlarm=(ListView)findViewById(R.id.listview_alarm);

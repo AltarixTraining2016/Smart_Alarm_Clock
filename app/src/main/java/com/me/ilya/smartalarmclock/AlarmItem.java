@@ -18,6 +18,7 @@ public class AlarmItem {
     static private String SONG = "song";
     static private String DAYS = "days";
     static private String ENABLED = "enabled";
+    static private String TONE= "tone";
 
     public static String[] COLUMN_NAMES = {
             ID,
@@ -26,15 +27,17 @@ public class AlarmItem {
             TIME_MINUTE,
             SONG,
             DAYS,
-            ENABLED
+            ENABLED,
+            TONE
     };
     private final int id;
     private final String name;
-    private final Song song;
+    private final String song;
     private final int timeHour;
     private final int timeMinute;
     private final boolean days[];
     private  final boolean enabled;
+    private  final boolean tone;
 
     public static final int SUNDAY = 0;
     public static final int MONDAY = 1;
@@ -51,11 +54,21 @@ public class AlarmItem {
                 Boolean.toString(days[3]) + " " +
                 Boolean.toString(days[4]) + " " +
                 Boolean.toString(days[5]) + " " +
-                Boolean.toString(days[6]),enabled
+                Boolean.toString(days[6]),enabled, tone
         });
     }
 
-    public AlarmItem(int ID, String name, int timeHour, int timeMinute, Song song1) {
+    public AlarmItem(AlarmItem a){
+        this.id=a.getId();
+        this.song=a.getSong();
+        this.enabled=a.isEnabled();
+        this.name = a.getName();
+        this.timeHour = a.timeHour;
+        this.timeMinute = a.timeMinute;
+        days=a.getDays();
+        tone =a.isTone();
+    }
+    public AlarmItem(int ID, String name, int timeHour, int timeMinute, String  song1,boolean tone) {
         this.id = ID;
         song = song1;
         enabled = true;
@@ -64,9 +77,10 @@ public class AlarmItem {
         this.timeMinute = timeMinute;
         days = new boolean[7];
         Arrays.fill(days, true);
+        this.tone =tone;
     }
 
-    public AlarmItem(int ID, String name, int timeHour, int timeMinute, Song song, boolean[] b,boolean enabled) {
+    public AlarmItem(int ID, String name, int timeHour, int timeMinute,String song, boolean[] b,boolean enabled,boolean isTone) {
         this.id = ID;
         this.enabled = enabled;
         this.name = name;
@@ -74,6 +88,7 @@ public class AlarmItem {
         this.timeMinute = timeMinute;
         this.song = song;
         days = b;
+        this.tone =isTone;
     }
 
     public AlarmItem(int ID, String name, int timeHour, int timeMinute,boolean enabled) {
@@ -84,7 +99,8 @@ public class AlarmItem {
         Arrays.fill(days, true);
         this.timeHour = timeHour;
         this.timeMinute = timeMinute;
-        song = Song.DEFAULT();
+        song = Song.DEFAULT().getUri();///TODO
+        tone=true;
     }
 
     public void setDay(int dayOfWeek, boolean value) {
@@ -105,14 +121,19 @@ public class AlarmItem {
 
         int id = cursor.getInt(cursor.getColumnIndex(ID));
         String name = cursor.getString(cursor.getColumnIndex(NAME));
+        String song = cursor.getString(cursor.getColumnIndex(SONG));
+        boolean tone = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(TONE)));
         int timeHour = cursor.getInt(cursor.getColumnIndex(TIME_HOUR));
         int timeMinute = cursor.getInt(cursor.getColumnIndex(TIME_MINUTE));
-        String[] parts = cursor.getString(cursor.getColumnIndex(AlarmItem.DAYS)).split(" ");
-        boolean enabled=    Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(ENABLED)));
-        AlarmItem alarmItem = new AlarmItem(id, name, timeHour, timeMinute,enabled);
+        String[] parts = cursor.getString(cursor.getColumnIndex(AlarmItem.DAYS)).split(",");
+        boolean[] days=new boolean[7];
+        boolean enabled=false;
+        if(cursor.getString(cursor.getColumnIndex(ENABLED)).equals("1"))enabled=true;
+
         for (int i = 0; i < 7; i++)
-            alarmItem.setDay(i, Boolean.parseBoolean(parts[i]));
-        return alarmItem;
+           days[i]= Boolean.parseBoolean(parts[i]);
+        return new AlarmItem(id, name, timeHour, timeMinute,song,days,enabled,tone);
+
     }
 
     public int getId() {
@@ -127,8 +148,8 @@ public class AlarmItem {
         return timeMinute;
     }
 
-    public Song getSong() {
-        return new Song(song);
+    public String getSong() {
+        return song;
     }
 
     public int getTimeHour() {
@@ -143,4 +164,7 @@ public class AlarmItem {
         return enabled;
     }
 
+    public boolean isTone() {
+        return tone;
+    }
 }

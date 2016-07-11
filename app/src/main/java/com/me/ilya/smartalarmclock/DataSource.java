@@ -10,11 +10,11 @@ import java.util.ArrayList;
  * Created by Ilya on 6/17/2016.
  */
 public interface DataSource {
+    public void clearAll();
     public ArrayList<AlarmItem> getAlarms();
-    void alarmItemChange(AlarmItem alarmItem);
+    long alarmItemChange(AlarmItem alarmItem);
     Cursor alarmItemsGet();
-    void addAlarmItem(AlarmItem alarmItem);
-    void deleteAlarmItem(int id);
+    public long createAlarm(AlarmItem alarmItem);
+    int deleteAlarmItem(int id);
     AlarmItem getAlarmById(int id);
-    Cursor songGet();
 }

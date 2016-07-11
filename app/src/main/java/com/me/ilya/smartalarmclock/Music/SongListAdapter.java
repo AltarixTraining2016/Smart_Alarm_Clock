@@ -69,7 +69,7 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
                     if (alarmId != -1){
                         AlarmItem aItem = AlarmClockApplication.getDataSource().getAlarmById(alarmId);
                         if (aItem != null){
-                            AlarmItem newAlarm = new AlarmItem(alarmId, aItem.getName(),aItem.getTimeHour(),aItem.getTimeMinute(),song);
+                            AlarmItem newAlarm = new AlarmItem(alarmId, aItem.getName(),aItem.getTimeHour(),aItem.getTimeMinute(),song.getUri(),false);
                             AlarmClockApplication.getDataSource().alarmItemChange(newAlarm);
                         }
                     }
@@ -78,7 +78,7 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
                         mpintro.release();
                     mpintro=null;}
                     Intent intent=new Intent();
-                    intent.putExtra("song",song);
+                    intent.putExtra("song",song.getUri());
                     mActivity.setResult(Activity.RESULT_OK,intent);
 
                      mActivity.finish();

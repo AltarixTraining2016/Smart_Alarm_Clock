@@ -1,6 +1,7 @@
 package com.me.ilya.smartalarmclock.main;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,12 +20,15 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.me.ilya.smartalarmclock.AlarmEditActivity;
 import com.me.ilya.smartalarmclock.AlarmItem;
 import com.me.ilya.smartalarmclock.AlarmManagerHelper;
 import com.me.ilya.smartalarmclock.R;
 import com.me.ilya.smartalarmclock.Titleable;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +39,11 @@ import butterknife.ButterKnife;
 public class AlarmListFragment extends Fragment implements Titleable {
     AlarmItem deletedAlarm;
     Adapter adapter;
+    @BindView(R.id.next_alarm)
+    TextView nextAlarm;
+
+    @BindView(R.id.remain_time)
+    TextView remainTime;
 
     @Override
     public String getTitle(Context context) {
@@ -47,11 +56,57 @@ public class AlarmListFragment extends Fragment implements Titleable {
 
     RecyclerView alarmListRecycleView;
 
+    public void setRemainings() {
+        Calendar calendar = AlarmManagerHelper.getTimeToNext();
+        if (calendar == null) {
+            nextAlarm.setText("Активных будильников нет");
+            remainTime.setText("");
+        } else {
+            nextAlarm.setText("Следующий будильник: " + calendarDay(calendar.get(Calendar.DAY_OF_WEEK)) + ", " + calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));//TODO
+            String[] str;
+            StringBuilder sb = new StringBuilder();
+            sb.append("Оставшееся время: ");
+            str = AlarmManagerHelper.parseTime(calendar.getTimeInMillis() - Calendar.getInstance().getTimeInMillis()).split(" ");
+            if (str.length > 3) sb.append(str[3]).append("д. ");
+            if (str.length > 2) sb.append(str[2]).append("ч. ");
+            if (str.length > 1) sb.append(str[1]).append("мин. ");
+            if (sb.length() < 19) sb.append("Менее минуты");//TODO отделить тексты
+            remainTime.setText(sb.toString());
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setRemainings();
+    }
+
+    private static String calendarDay(int day) {
+        switch (day) {
+            case 1:
+                return "Воскресенье";
+            case 2:
+                return "Понедельник";//TODO
+            case 3:
+                return "Вторник";
+            case 4:
+                return "Среда";
+            case 5:
+                return "Четверг";
+            case 6:
+                return "Пятница";
+            case 7:
+                return "Суббота";
+        }
+        return null;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         ImageView addButton;
         View v = inflater.inflate(R.layout.alarm_list_fragment, container, false);
+        ButterKnife.bind(this, v);
         alarmListRecycleView = (RecyclerView) v.findViewById(R.id.alarm_list);
         addButton = (ImageView) v.findViewById(R.id.btn_addAlarm);
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -69,8 +124,6 @@ public class AlarmListFragment extends Fragment implements Titleable {
         if (resultCode == Activity.RESULT_OK) {
 
 
-
-
             adapter.swapCursor(AlarmClockApplication.getDataSource().alarmItemsGet());
         }
     }
@@ -78,6 +131,7 @@ public class AlarmListFragment extends Fragment implements Titleable {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         adapter = new Adapter(getContext(), AlarmClockApplication.getDataSource().alarmItemsGet());
         alarmListRecycleView.setAdapter(adapter);
         alarmListRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -90,6 +144,7 @@ public class AlarmListFragment extends Fragment implements Titleable {
         TextView unabledDays;
         @BindView(R.id.unabled_tv_name)
         TextView unabledName;
+
 
         @BindView(R.id.tv_time_unabled)
         TextView unabledTime;
@@ -126,9 +181,9 @@ public class AlarmListFragment extends Fragment implements Titleable {
                 turnOffButton.setVisibility(View.INVISIBLE);
 
                 nameTextView.setVisibility(View.VISIBLE);
-               daysTextView.setVisibility(View.VISIBLE);
-               timeTextView.setVisibility(View.VISIBLE);
-               onButton.setVisibility(View.VISIBLE);
+                daysTextView.setVisibility(View.VISIBLE);
+                timeTextView.setVisibility(View.VISIBLE);
+                onButton.setVisibility(View.VISIBLE);
 
                 FrameLayout frameLayout = (FrameLayout) itemView.findViewById(R.id.item_back);
                 final int sdk = android.os.Build.VERSION.SDK_INT;
@@ -160,7 +215,7 @@ public class AlarmListFragment extends Fragment implements Titleable {
                 } else {
                     frameLayout.setBackground(getResources().getDrawable(R.drawable.list_item_background_unabled));
                 }
-              unabledName.setText(this.alarmItem.getName());
+                unabledName.setText(this.alarmItem.getName());
                 unabledTime.setText(String.format(getString(R.string.alarm_time), alarmItem.getTimeHour(), alarmItem.getTimeMinute()));
             }
 
@@ -181,17 +236,23 @@ public class AlarmListFragment extends Fragment implements Titleable {
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem item) {
+
                             deletedAlarm = AlarmClockApplication.getDataSource().getAlarmById(alarmItem.getId());
-                            deletedAlarm.setDays(alarmItem.getDays());
+                            //deletedAlarm.setDays(alarmItem.getDays());
+                            AlarmManagerHelper.cancelAlarms(getContext());
                             AlarmClockApplication.getDataSource().deleteAlarmItem(alarmItem.getId());
+                            AlarmManagerHelper.setAlarms(getContext());
                             adapter.swapCursor(AlarmClockApplication.getDataSource().alarmItemsGet());
+                            setRemainings();
                             Snackbar mSnackBar = Snackbar.make(itemView, "Будильник " + alarmItem.getName() + " удален", Snackbar.LENGTH_LONG);
                             mSnackBar.setAction("Отменить", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    AlarmClockApplication.getDataSource().alarmItemChange(deletedAlarm);
+                                    AlarmClockApplication.getDataSource().createAlarm(deletedAlarm);
                                     deletedAlarm = null;
                                     adapter.swapCursor(AlarmClockApplication.getDataSource().alarmItemsGet());
+                                    AlarmManagerHelper.setAlarms(getContext());
+                                    setRemainings();
                                 }
                             });
                             mSnackBar.show();
@@ -231,7 +292,8 @@ public class AlarmListFragment extends Fragment implements Titleable {
                     }
                 }
             }
-            if(alarmItem.getDay(AlarmItem.SUNDAY)) stringBuilder.append(getString(R.string.sunday)).append(" ");
+            if (alarmItem.getDay(AlarmItem.SUNDAY))
+                stringBuilder.append(getString(R.string.sunday)).append(" ");
             daysTextView.setText(stringBuilder.toString());
             unabledDays.setText(stringBuilder.toString());
         }
@@ -249,6 +311,7 @@ public class AlarmListFragment extends Fragment implements Titleable {
             //       this.parent=parent;
             return new ViewHolder(parent);
         }
+
         @Override
         public void onBindViewHolder(final ViewHolder viewHolder, final Cursor cursor) {
             final AlarmItem alarmItem = AlarmItem.fromCursor(cursor);//как
@@ -260,20 +323,33 @@ public class AlarmListFragment extends Fragment implements Titleable {
                 public void onClick(View v) {
 
                     AlarmManagerHelper.cancelAlarms(getContext());
-                    AlarmItem newAlarmItem = new AlarmItem(alarmItem.getId(), alarmItem.getName(), alarmItem.getTimeHour(), alarmItem.getTimeMinute(), alarmItem.getSong(), alarmItem.getDays(), !alarmItem.isEnabled());
+
+                    AlarmItem newAlarmItem = new AlarmItem(alarmItem.getId(), alarmItem.getName(), alarmItem.getTimeHour(), alarmItem.getTimeMinute(), alarmItem.getSong(), alarmItem.getDays(), !alarmItem.isEnabled(),alarmItem.isTone());
                     AlarmClockApplication.getDataSource().alarmItemChange(newAlarmItem);
                     swapCursor(AlarmClockApplication.getDataSource().alarmItemsGet());
                     AlarmManagerHelper.setAlarms(getContext());
+                    setRemainings();
                 }
             });
             viewHolder.turnOffButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     AlarmManagerHelper.cancelAlarms(getContext());
-                    AlarmItem newAlarmItem = new AlarmItem(alarmItem.getId(), alarmItem.getName(), alarmItem.getTimeHour(), alarmItem.getTimeMinute(), alarmItem.getSong(), alarmItem.getDays(), !alarmItem.isEnabled());
+                    AlarmItem newAlarmItem = new AlarmItem(alarmItem.getId(), alarmItem.getName(), alarmItem.getTimeHour(), alarmItem.getTimeMinute(), alarmItem.getSong(), alarmItem.getDays(), !alarmItem.isEnabled(),alarmItem.isTone());
                     AlarmClockApplication.getDataSource().alarmItemChange(newAlarmItem);
                     swapCursor(AlarmClockApplication.getDataSource().alarmItemsGet());
                     AlarmManagerHelper.setAlarms(getContext());
+                    setRemainings();
+                    String[] str;
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("Будильник сработает через: ");//TODO спросить -1
+                    str = AlarmManagerHelper.setAlarms(getContext(), alarmItem.getId()).split(" ");
+
+                    if (str.length > 3) sb.append(str[3]).append("д. ");
+                    if (str.length > 2) sb.append(str[2]).append("ч. ");
+                    if (str.length > 1) sb.append(str[1]).append("мин. ");
+                    if (str.length > 0) sb.append(str[0]).append("сек. ");
+                    Toast.makeText(getContext(), sb.toString(), Toast.LENGTH_LONG).show();
                 }
             });
         }

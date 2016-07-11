@@ -50,6 +50,7 @@ public class AlarmScreen extends Activity {
             @Override
             public void onClick(View view) {
                 mPlayer.stop();
+                mPlayer.release();
                 finish();
             }
         });

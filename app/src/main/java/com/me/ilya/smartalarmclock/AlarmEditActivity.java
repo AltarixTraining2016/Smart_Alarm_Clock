@@ -1,16 +1,21 @@
 package com.me.ilya.smartalarmclock;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -19,6 +24,7 @@ import com.me.ilya.smartalarmclock.main.AlarmClockApplication;
 import com.me.ilya.smartalarmclock.music.Song;
 import com.me.ilya.smartalarmclock.music.SongListActivity;
 
+import java.io.File;
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -30,7 +36,7 @@ import butterknife.OnClick;
  */
 public class AlarmEditActivity extends AppCompatActivity {
     AlarmItem alarmItem;
-    Song song;
+    String song;
     @BindView(R.id.chk_mond)
     DaySwitcher chekMonday;
     @BindView(R.id.chk_tue)
@@ -45,8 +51,12 @@ public class AlarmEditActivity extends AppCompatActivity {
     DaySwitcher chekSaturday;
     @BindView(R.id.chk_sun)
     DaySwitcher chekSunday;
-
-
+    @BindView(R.id.signal_radio_button)
+    RadioButton signalRadioButton;
+    @BindView(R.id.edit_signal_name)
+    TextView signalName;
+    @BindView(R.id.song_radio_button)
+    RadioButton songRadioButton;
     @BindView(R.id.alarm_name)
     EditText alarmNameEditText;
     TimePicker tp;
@@ -72,13 +82,37 @@ public class AlarmEditActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            song = (Song) data.getSerializableExtra("song");
-            editSongName.setText(song.getName());
+            switch (requestCode) {
+                case 1:
+                    song = (String) data.getSerializableExtra("song");
+                    editSongName.setText(new File(song).getName());
+                    signalName.setText("");
+                    setSongRadioButton();
+                    alarmItem = new AlarmItem(alarmId, alarmItem.getName(), alarmItem.getTimeHour(), alarmItem.getTimeMinute(), song, alarmItem.getDays(), alarmItem.isEnabled(), false);
+                    break;
+                case 2:
+                    song= data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI).toString();
+                    editSongName.setText("");
+                    alarmItem = new AlarmItem(alarmId, alarmItem.getName(), alarmItem.getTimeHour(), alarmItem.getTimeMinute(),song, alarmItem.getDays(), alarmItem.isEnabled(), true);
+                    signalName.setText(RingtoneManager.getRingtone(this, (Uri) data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)).getTitle(this));
+                    setSignalRadioButton();
+                    break;
+            }
         }
+
         //if(AlarmClockApplication.getDataSource().getAlarmById(alarmId).getSong()!=null)
         //editSongName.setText(AlarmClockApplication.getDataSource().getAlarmById(alarmId).getSong().getName());
     }
 
+    public void setSignalRadioButton() {
+        signalRadioButton.setChecked(true);
+        songRadioButton.setChecked(false);
+    }
+
+    public void setSongRadioButton() {
+        songRadioButton.setChecked(true);
+        signalRadioButton.setChecked(false);
+    }
 
     @OnClick(R.id.cancel_button)
     public void cancelClick() {
@@ -89,37 +123,52 @@ public class AlarmEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.alarm_edit_activity);
 
         ButterKnife.bind(this);
+
+        signalRadioButton.setClickable(false);
+        songRadioButton.setClickable(false);
         alarmId = getIntent().getIntExtra(EXTRA_ALARM_ID, -1);//notSet
         tp = (TimePicker) findViewById(R.id.timePicker);
         tp.setIs24HourView(true);
         if (alarmId != -1) {
             alarmItem = AlarmClockApplication.getDataSource().getAlarmById(alarmId);
             if (alarmItem != null) {
-                song = alarmItem.getSong();
                 alarmNameEditText.setText(alarmItem.getName());
                 tp.setCurrentMinute(alarmItem.getTimeMinute());
                 tp.setCurrentHour(alarmItem.getTimeHour());
-                editSongName.setText(alarmItem.getSong().getName());
+
+                if (alarmItem.isTone()) {
+                    signalName.setText(RingtoneManager.getRingtone(this, Uri.parse(alarmItem.getSong())).getTitle(this));
+                    setSignalRadioButton();
+                    editSongName.setText("");
+                } else {
+                    signalName.setText("");
+                    editSongName.setText(new File(alarmItem.getSong()).getName());
+                    setSongRadioButton();
+                }
             }
         } else {
-            alarmItem = new AlarmItem(alarmId, "", tp.getCurrentHour(), tp.getCurrentMinute(), Song.DEFAULT());
-            song = Song.DEFAULT();
-            editSongName.setText("Default(" + RingtoneManager.getRingtone(this, Uri.parse(Song.DEFAULT_URI)).getTitle(this) + ")");
-
+            alarmItem = new AlarmItem(alarmId, "", tp.getCurrentHour(), tp.getCurrentMinute(), Song.DEFAULT().getUri(),true);
+            song = Song.DEFAULT().getUri();
+            signalName.setText(RingtoneManager.getRingtone(this,Uri.parse(song)).getTitle(this));
+            editSongName.setText("");
+            setSignalRadioButton();
         }
         setDays();
-        ImageView imageView = (ImageView) findViewById(R.id.song_list);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startAct();
-            }
-        });
 
+
+    }
+
+    @OnClick(R.id.song_button)
+    public void songButton(){
+        startActivityForResult(SongListActivity.intent(AlarmEditActivity.this, alarmId), 1);
+    }
+    @OnClick(R.id.signal_button)
+    public void signalButton() {
+        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+        startActivityForResult(intent, 2);
     }
 
     private void setDays() {
@@ -132,15 +181,11 @@ public class AlarmEditActivity extends AppCompatActivity {
         chekSunday.setChecked(alarmItem.getDay(AlarmItem.SUNDAY));
     }
 
-    private void startAct() {
-        startActivityForResult(SongListActivity.intent(AlarmEditActivity.this, alarmId), 0);
-    }
-
 
     @OnClick(R.id.accept_button)
     public void accept() {
 
-        AlarmItem newAlarmItem = new AlarmItem(alarmId, alarmNameEditText.getText().toString(), tp.getCurrentHour(), tp.getCurrentMinute(), song);
+        AlarmItem newAlarmItem = new AlarmItem(alarmId, alarmNameEditText.getText().toString(), tp.getCurrentHour(), tp.getCurrentMinute(), song,true);
         newAlarmItem.setDay(AlarmItem.MONDAY, chekMonday.isChecked());
         newAlarmItem.setDay(AlarmItem.TUESDAY, chekTuesday.isChecked());
         newAlarmItem.setDay(AlarmItem.WEDNESDAY, chekWednesday.isChecked());
@@ -148,43 +193,16 @@ public class AlarmEditActivity extends AppCompatActivity {
         newAlarmItem.setDay(AlarmItem.FRDIAY, chekFriday.isChecked());
         newAlarmItem.setDay(AlarmItem.SATURDAY, chekSaturday.isChecked());
         newAlarmItem.setDay(AlarmItem.SUNDAY, chekSunday.isChecked());
-        AlarmClockApplication.getDataSource().alarmItemChange(newAlarmItem);
-
-
-        //    final int nowDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-        //    final int nowHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        //    final int nowMinute = Calendar.getInstance().get(Calendar.MINUTE);
-        //    boolean alarmSet = false;
-//
-        //    for (int dayOfWeek = 1; dayOfWeek <= 7; ++dayOfWeek) {
-        //        if (alarmItem.getDay(dayOfWeek - 1) && dayOfWeek >= nowDay &&
-        //                !(dayOfWeek == nowDay && alarmItem.getTimeHour() < nowHour) &&
-        //                !(dayOfWeek == nowDay && alarmItem.getTimeHour() == nowHour && alarmItem.getTimeMinute() <= nowMinute)) {
-        //             calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-        //            setAlarm(context, calendar, pIntent);
-        //            alarmSet = true;
-        //            break;
-        //        }
-        //    }
-//
-        //    //Else check if it's earlier in the week
-        //    if (!alarmSet) {
-        //        for (int dayOfWeek = Calendar.SUNDAY; dayOfWeek <= Calendar.SATURDAY; ++dayOfWeek) {
-        //            if (alarmItem.getDay(dayOfWeek - 1) && dayOfWeek <= nowDay){
-        //                calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-        //                calendar.add(Calendar.WEEK_OF_YEAR, 1);
-        //                setAlarm(context, calendar, pIntent);
-        //                alarmSet = true;
-        //                break;
-        //            }
-        //        }
-        //    }
+        long newId = 0;
+        if (alarmId == -1) newId = AlarmClockApplication.getDataSource().createAlarm(newAlarmItem);
+        else {
+            AlarmClockApplication.getDataSource().alarmItemChange(newAlarmItem);
+            newId = alarmId;
+        }
         String[] str;
         StringBuilder sb = new StringBuilder();
-        sb.append("Будильник сработает через: ");
-        if (alarmId == -1)
-            str = AlarmManagerHelper.setAlarms(this, AlarmClockApplication.getDataSource().getAlarms().size() - 1).split(" ");
-        else str = AlarmManagerHelper.setAlarms(this, alarmId).split(" ");
+        sb.append("Будильник сработает через: ");//TODO спросить -1
+        str = AlarmManagerHelper.setAlarms(this, newId).split(" ");
 
         if (str.length > 3) sb.append(str[3]).append("д. ");
         if (str.length > 2) sb.append(str[2]).append("ч. ");

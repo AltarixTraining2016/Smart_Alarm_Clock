@@ -5,13 +5,22 @@ android:background="@drawable/background"
     android:layout_height="match_parent">
     <TextView
         android:id="@+id/next_alarm"
-        android:text="nextAlarm:"
+        android:text="Следующий будильник:"
+        android:textAlignment="center"
+        android:textColor="@color/font_color"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/remain_time"
+        android:textColor="@color/font_color"
+        android:text="Оставшееся время:"
+        android:layout_below="@+id/next_alarm"
         android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 <android.support.v7.widget.RecyclerView
     android:id="@+id/alarm_list"
-    android:layout_below="@id/next_alarm"
+    android:layout_below="@id/remain_time"
     android:layout_height="match_parent"
     android:layout_above="@+id/btn_addAlarm"
     android:layout_marginEnd="5dp"

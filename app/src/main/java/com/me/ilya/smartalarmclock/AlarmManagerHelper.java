@@ -24,6 +24,7 @@ public class AlarmManagerHelper extends BroadcastReceiver {
     public static final String TIME_HOUR = "timeHour";
     public static final String TIME_MINUTE = "timeMinute";
     public static final String TONE = "alarmTone";
+    private static Calendar timeToNext;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -34,48 +35,31 @@ public class AlarmManagerHelper extends BroadcastReceiver {
         cancelAlarms(context);
 
         List<AlarmItem> alarms = AlarmClockApplication.getDataSource().getAlarms();
+        if (alarms != null) {
+            for (AlarmItem alarm : alarms) {
+                if (alarm.isEnabled()) {
 
-        for (AlarmItem alarm : alarms) {
-            if (alarm.isEnabled()) {
+                    PendingIntent pIntent = createPendingIntent(context, alarm);
 
-                PendingIntent pIntent = createPendingIntent(context, alarm);
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.HOUR_OF_DAY, alarm.getTimeHour());
-                calendar.set(Calendar.MINUTE, alarm.getTimeMinute());
-                calendar.set(Calendar.SECOND, 00);
-
-                //Find next time to set
-                final int nowDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-                final int nowHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-                final int nowMinute = Calendar.getInstance().get(Calendar.MINUTE);
-                boolean alarmSet = false;
-
-
-                //First check if it's later in the week
-                for (int dayOfWeek = 1; dayOfWeek <= 7; ++dayOfWeek) {
-                    if (alarm.getDay(dayOfWeek - 1) && dayOfWeek >= nowDay &&
-                            !(dayOfWeek == nowDay && alarm.getTimeHour() < nowHour) &&
-                            !(dayOfWeek == nowDay && alarm.getTimeHour() == nowHour && alarm.getTimeMinute() <= nowMinute)) {
-                        calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-
-
-                        setAlarm(context, calendar, pIntent);
-                        alarmSet = true;
-                        break;
-                    }
-                }
-
-                //Else check if it's earlier in the week
-                if (!alarmSet) {
-                    for (int dayOfWeek = Calendar.SUNDAY; dayOfWeek <= Calendar.SATURDAY; ++dayOfWeek) {
-                        if (alarm.getDay(dayOfWeek - 1) && dayOfWeek <= nowDay) {
-                            calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-                            calendar.add(Calendar.WEEK_OF_YEAR, 1);
-                            setAlarm(context, calendar, pIntent);
-                            alarmSet = true;
-                            break;
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(Calendar.HOUR_OF_DAY, alarm.getTimeHour());
+                    calendar.set(Calendar.MINUTE, alarm.getTimeMinute());
+                    calendar.set(Calendar.SECOND, 00);
+                    boolean alarmSet = false;
+                    if (!calendar.after(Calendar.getInstance())) calendar.add(Calendar.DATE, 1);
+                    while (!alarmSet) {
+                        for (int i = 0; i <= 6; i++) {
+                            if (alarm.getDay(calendar.get(Calendar.DAY_OF_WEEK) - 1)) {
+                                setAlarm(context, calendar, pIntent);
+                                alarmSet = true;
+                            } else calendar.add(Calendar.DATE, 1);
                         }
+                    }
+
+                    Calendar today = Calendar.getInstance();
+                    long diffInMillisec = calendar.getTimeInMillis() - today.getTimeInMillis();//result in millis
+                    if (timeToNext == null || calendar.getTimeInMillis() < timeToNext.getTimeInMillis()) {
+                        timeToNext = calendar;
                     }
                 }
             }
@@ -83,74 +67,64 @@ public class AlarmManagerHelper extends BroadcastReceiver {
         return null;
     }
 
-    public static String setAlarms(Context context, int id) {
+    public static String setAlarms(Context context, long id) {
         cancelAlarms(context);
-        StringBuilder sb = new StringBuilder();
 
+        String str = "";
         List<AlarmItem> alarms = AlarmClockApplication.getDataSource().getAlarms();
 
         for (AlarmItem alarm : alarms) {
             if (alarm.isEnabled()) {
-
                 PendingIntent pIntent = createPendingIntent(context, alarm);
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY, alarm.getTimeHour());
                 calendar.set(Calendar.MINUTE, alarm.getTimeMinute());
                 calendar.set(Calendar.SECOND, 00);
-
-                //Find next time to set
-                final int nowDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-                final int nowHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-                final int nowMinute = Calendar.getInstance().get(Calendar.MINUTE);
                 boolean alarmSet = false;
-
-                Calendar today = Calendar.getInstance();
-
-                //First check if it's later in the week
-                for (int dayOfWeek = 1; dayOfWeek <= 7; ++dayOfWeek) {
-                    if (alarm.getDay(dayOfWeek - 1) && dayOfWeek >= nowDay &&
-                            !(dayOfWeek == nowDay && alarm.getTimeHour() < nowHour) &&
-                            !(dayOfWeek == nowDay && alarm.getTimeHour() == nowHour && alarm.getTimeMinute() <= nowMinute)) {
-                        calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-
-
-                        setAlarm(context, calendar, pIntent);
-                        alarmSet = true;
-                        break;
-                    }
-                }
-
-                //Else check if it's earlier in the week
-                if (!alarmSet) {
-                    for (int dayOfWeek = Calendar.SUNDAY; dayOfWeek <= Calendar.SATURDAY; ++dayOfWeek) {
-                        if (alarm.getDay(dayOfWeek - 1) && dayOfWeek <= nowDay) {
-                            calendar.set(Calendar.DAY_OF_WEEK, dayOfWeek);
-                            calendar.add(Calendar.WEEK_OF_YEAR, 1);
+                if (!calendar.after(Calendar.getInstance())) calendar.add(Calendar.DATE, 1);
+                while (!alarmSet) {
+                    for (int i = 0; i <= 6; i++) {
+                        if (alarm.getDay(calendar.get(Calendar.DAY_OF_WEEK) - 1)) {
                             setAlarm(context, calendar, pIntent);
                             alarmSet = true;
-                            break;
-                        }
+                        } else calendar.add(Calendar.DATE, 1);
                     }
                 }
+
+                Calendar today = Calendar.getInstance();
+                long diffInMillisec = calendar.getTimeInMillis() - today.getTimeInMillis();//result in millis
+
                 if (alarm.getId() == id) {
-                    long diffInMillisec = calendar.getTimeInMillis() - today.getTimeInMillis();//result in millis
-                    long diffInSec = TimeUnit.MILLISECONDS.toSeconds(diffInMillisec);
-                    long seconds = diffInSec % 60;
-                    diffInSec /= 60;
-                    long minutes = diffInSec % 60;
-                    diffInSec /= 60;
-                    long hours = diffInSec % 24;
-                    diffInSec /= 24;
-                    long days = diffInSec;
-                    sb.append(seconds);
-                    if(minutes!=0)sb.append(" ").append(minutes);
-                    if(hours!=0)sb.append(" ").append(hours);
-                    if(days!=0)sb.append(" ").append(days);
+                    str = parseTime(diffInMillisec);
+                }
+                if (timeToNext == null || calendar.getTimeInMillis() < timeToNext.getTimeInMillis()) {
+                    timeToNext = calendar;
                 }
             }
         }
-        return sb.toString();//"seconds minutes hours days"
+        return str;//"seconds minutes hours days" invert
+    }
+
+    public static String parseTime(long diffInMillisec) {
+        StringBuilder sb = new StringBuilder();
+        long diffInSec = TimeUnit.MILLISECONDS.toSeconds(diffInMillisec);
+        long seconds = diffInSec % 60;
+        diffInSec /= 60;
+        long minutes = diffInSec % 60;
+        diffInSec /= 60;
+        long hours = diffInSec % 24;
+        diffInSec /= 24;
+        long days = diffInSec;
+        sb.append(seconds);
+        if (minutes != 0) sb.append(" ").append(minutes);
+        if (hours != 0) sb.append(" ").append(hours);
+        if (days != 0) sb.append(" ").append(days);
+        return sb.toString();
+    }
+
+    public static Calendar getTimeToNext() {
+        return timeToNext;
     }
 
     @SuppressLint("NewApi")
@@ -164,7 +138,7 @@ public class AlarmManagerHelper extends BroadcastReceiver {
     }
 
     public static void cancelAlarms(Context context) {
-
+        timeToNext = null;
         List<AlarmItem> alarms = AlarmClockApplication.getDataSource().getAlarms();
 
         if (alarms != null) {
@@ -185,7 +159,7 @@ public class AlarmManagerHelper extends BroadcastReceiver {
         intent.putExtra(NAME, alarmItem.getName());
         intent.putExtra(TIME_HOUR, alarmItem.getTimeHour());
         intent.putExtra(TIME_MINUTE, alarmItem.getTimeMinute());
-        intent.putExtra(TONE, alarmItem.getSong().getUri());
+        intent.putExtra(TONE, alarmItem.getSong());
 
         return PendingIntent.getService(context, (int) alarmItem.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }

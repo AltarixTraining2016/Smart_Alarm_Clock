@@ -9,6 +9,7 @@
     <color name="item_focused">#28ffffff</color>
     <color name="unabled_item_focused">#17eaeaea</color>
     <color name="black">#000000</color>
+    <color name="transparent">#00ffffff</color>
 
     <color name="smf2">#ffffff</color>
     <color name="item_color">#a0388bba</color>
