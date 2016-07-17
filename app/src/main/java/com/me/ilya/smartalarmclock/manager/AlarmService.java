@@ -1,8 +1,10 @@
-package com.me.ilya.smartalarmclock;
+package com.me.ilya.smartalarmclock.manager;
 
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+
+import com.me.ilya.smartalarmclock.AlarmScreen;
 
 /**
  * Created by Ilya on 7/4/2016.

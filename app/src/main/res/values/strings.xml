@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">"Smart Alarm Clock "</string>
+    <string name="application_name">"Smart Alarm Clock"</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -13,7 +14,7 @@
     <string name="menu_delete">Удалить</string>
 
 
-    <string name="alarm_time">%1$s:%2$s</string>
+    <string name="alarm_time">%1$02d:%2$02d</string>
 
     <string name="monday"> Пн </string>
     <string name="tuesday"> Вт </string>
@@ -22,4 +23,18 @@
     <string name="friday"> Пт </string>
     <string name="saturday"> Сб </string>
     <string name="sunday"> Вс </string>
+
+    <string name="next_alarm"> Следующий будильник: </string>
+    <string name="next_alarm_toast"> Будильник сработает через: </string>
+    <string name="days"> д. </string>
+    <string name="hours"> ч. </string>
+    <string name="minutes"> мин. </string>
+    <string name="seconds"> сек. </string>
+    <string name="remain_time">"Оставшееся время: "</string>
+    <string name="less_minute">Менее минуты</string>
+    <string name="no_available_alarm">Активных будильников нет</string>
+    <string name="cancel">Отменить</string>
+    <string name="next">%1$s,%2$02d:%3$02d</string>
+    <string name="notification">"Следующий будильник установлен на %1$s %2$02d:%3$02d"</string>
+    <string name="everyday">Ежедневно</string>
 </resources>

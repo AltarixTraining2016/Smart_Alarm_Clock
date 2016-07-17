@@ -1,18 +1,13 @@
 package com.me.ilya.smartalarmclock;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -20,12 +15,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.me.ilya.smartalarmclock.data.AlarmItem;
 import com.me.ilya.smartalarmclock.main.AlarmClockApplication;
+import com.me.ilya.smartalarmclock.manager.AlarmManagerHelper;
 import com.me.ilya.smartalarmclock.music.Song;
 import com.me.ilya.smartalarmclock.music.SongListActivity;
-
 import java.io.File;
-import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -91,9 +86,13 @@ public class AlarmEditActivity extends AppCompatActivity {
                     alarmItem = new AlarmItem(alarmId, alarmItem.getName(), alarmItem.getTimeHour(), alarmItem.getTimeMinute(), song, alarmItem.getDays(), alarmItem.isEnabled(), false);
                     break;
                 case 2:
-                    song= data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI).toString();
+                    try {
+                        song = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI).toString();
+                    } catch (NullPointerException e) {
+                        song=Song.DEFAULT_URI;
+                    }
                     editSongName.setText("");
-                    alarmItem = new AlarmItem(alarmId, alarmItem.getName(), alarmItem.getTimeHour(), alarmItem.getTimeMinute(),song, alarmItem.getDays(), alarmItem.isEnabled(), true);
+                    alarmItem = new AlarmItem(alarmId, alarmItem.getName(), alarmItem.getTimeHour(), alarmItem.getTimeMinute(), song, alarmItem.getDays(), alarmItem.isEnabled(), true);
                     signalName.setText(RingtoneManager.getRingtone(this, (Uri) data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)).getTitle(this));
                     setSignalRadioButton();
                     break;
@@ -126,7 +125,13 @@ public class AlarmEditActivity extends AppCompatActivity {
         setContentView(R.layout.alarm_edit_activity);
 
         ButterKnife.bind(this);
-
+        chekMonday.setText(getString(R.string.monday));
+        chekTuesday.setText(getString(R.string.tuesday));
+        chekWednesday.setText(getString(R.string.wednesday));
+        chekThursday.setText(getString(R.string.thursday));
+        chekFriday.setText(getString(R.string.friday));
+        chekSaturday.setText(getString(R.string.saturday));
+        chekSunday.setText(getString(R.string.sunday));
         signalRadioButton.setClickable(false);
         songRadioButton.setClickable(false);
         alarmId = getIntent().getIntExtra(EXTRA_ALARM_ID, -1);//notSet
@@ -142,17 +147,19 @@ public class AlarmEditActivity extends AppCompatActivity {
                 if (alarmItem.isTone()) {
                     signalName.setText(RingtoneManager.getRingtone(this, Uri.parse(alarmItem.getSong())).getTitle(this));
                     setSignalRadioButton();
+                    song = alarmItem.getSong();
                     editSongName.setText("");
                 } else {
+                    song = alarmItem.getSong();
                     signalName.setText("");
                     editSongName.setText(new File(alarmItem.getSong()).getName());
                     setSongRadioButton();
                 }
             }
         } else {
-            alarmItem = new AlarmItem(alarmId, "", tp.getCurrentHour(), tp.getCurrentMinute(), Song.DEFAULT().getUri(),true);
+            alarmItem = new AlarmItem(alarmId, "", tp.getCurrentHour(), tp.getCurrentMinute(), Song.DEFAULT().getUri(), true);
             song = Song.DEFAULT().getUri();
-            signalName.setText(RingtoneManager.getRingtone(this,Uri.parse(song)).getTitle(this));
+            signalName.setText(RingtoneManager.getRingtone(this, Uri.parse(song)).getTitle(this));
             editSongName.setText("");
             setSignalRadioButton();
         }
@@ -162,9 +169,10 @@ public class AlarmEditActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.song_button)
-    public void songButton(){
+    public void songButton() {
         startActivityForResult(SongListActivity.intent(AlarmEditActivity.this, alarmId), 1);
     }
+
     @OnClick(R.id.signal_button)
     public void signalButton() {
         Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
@@ -185,7 +193,7 @@ public class AlarmEditActivity extends AppCompatActivity {
     @OnClick(R.id.accept_button)
     public void accept() {
 
-        AlarmItem newAlarmItem = new AlarmItem(alarmId, alarmNameEditText.getText().toString(), tp.getCurrentHour(), tp.getCurrentMinute(), song,true);
+        AlarmItem newAlarmItem = new AlarmItem(alarmId, alarmNameEditText.getText().toString(), tp.getCurrentHour(), tp.getCurrentMinute(), song, alarmItem.isTone());
         newAlarmItem.setDay(AlarmItem.MONDAY, chekMonday.isChecked());
         newAlarmItem.setDay(AlarmItem.TUESDAY, chekTuesday.isChecked());
         newAlarmItem.setDay(AlarmItem.WEDNESDAY, chekWednesday.isChecked());
@@ -199,15 +207,16 @@ public class AlarmEditActivity extends AppCompatActivity {
             AlarmClockApplication.getDataSource().alarmItemChange(newAlarmItem);
             newId = alarmId;
         }
-        String[] str;
+
+       String[] str;
         StringBuilder sb = new StringBuilder();
-        sb.append("Будильник сработает через: ");//TODO спросить -1
+        sb.append(getString(R.string.next_alarm_toast));//TODO спросить -1ь
         str = AlarmManagerHelper.setAlarms(this, newId).split(" ");
 
-        if (str.length > 3) sb.append(str[3]).append("д. ");
-        if (str.length > 2) sb.append(str[2]).append("ч. ");
-        if (str.length > 1) sb.append(str[1]).append("мин. ");
-        if (str.length > 0) sb.append(str[0]).append("сек. ");
+        if (Integer.parseInt(str[3]) != 0) sb.append(str[3]).append(getString(R.string.days));
+        if (Integer.parseInt(str[2]) != 0) sb.append(str[2]).append(getString(R.string.hours));
+        if (Integer.parseInt(str[1]) != 0) sb.append(str[1]).append(getString(R.string.minutes));
+        if (Integer.parseInt(str[0]) != 0) sb.append(str[0]).append(getString(R.string.seconds));
         Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
         setResult(RESULT_OK);
         finish();

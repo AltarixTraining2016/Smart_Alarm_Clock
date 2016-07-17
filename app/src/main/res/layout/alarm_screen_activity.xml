@@ -9,12 +9,12 @@
     android:gravity="center"
     android:id="@+id/alarm_screen_time"
     android:text="00:00"
-    android:textColor="@color/font_color"
+    android:textColor="@color/white_font"
     android:textSize="70dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content" />
     <TextView
-        android:textColor="@color/font_color"
+        android:textColor="@color/white_font"
         android:gravity="center"
         android:text="AlarmName"
         android:textSize="30dp"
@@ -31,8 +31,8 @@
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/alarm_screen_name"
         android:id="@+id/stop_playing"
-
-        android:textColor="@color/font_color"
+        android:textSize="40sp"
+        android:textColor="@color/white_font"
         android:layout_width="match_parent"
         android:text="Отключить"
         android:layout_height="80dp" />

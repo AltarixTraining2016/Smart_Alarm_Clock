@@ -11,12 +11,17 @@
     <color name="black">#000000</color>
     <color name="transparent">#00ffffff</color>
 
+    <color name="default_edit_button">#19ffffff</color>
+    <color name="pressed_edit_button">#15ccd1ff</color>
+
     <color name="smf2">#ffffff</color>
     <color name="item_color">#a0388bba</color>
+    <color name="song_item_color">#525599bf</color>
     <color name="unabled_item_color">#3c95b1c1</color>
     <color name="item_color_press">#6fa3a5d2</color>
 
-    <color name="font_color">#f1f1f1</color>
+    <color name="white_font">#ffffff</color>
+    <color name="gray_font">#d4d4d4</color>
     <color name="unabled_font_color">#c2c2c2</color>
 
     <color name="cross_button_color">#45beff</color>

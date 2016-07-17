@@ -1,14 +1,22 @@
-package com.me.ilya.smartalarmclock;
+package com.me.ilya.smartalarmclock.manager;
 
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.provider.Settings;
 
+import com.me.ilya.smartalarmclock.R;
+import com.me.ilya.smartalarmclock.data.AlarmItem;
 import com.me.ilya.smartalarmclock.main.AlarmClockApplication;
+import com.me.ilya.smartalarmclock.main.MainActivity;
+import com.me.ilya.smartalarmclock.manager.AlarmService;
 
 import java.util.Calendar;
 import java.util.List;
@@ -25,7 +33,7 @@ public class AlarmManagerHelper extends BroadcastReceiver {
     public static final String TIME_MINUTE = "timeMinute";
     public static final String TONE = "alarmTone";
     private static Calendar timeToNext;
-
+   private static NotificationManager notificationManager;
     @Override
     public void onReceive(Context context, Intent intent) {
         setAlarms(context);
@@ -33,7 +41,6 @@ public class AlarmManagerHelper extends BroadcastReceiver {
 
     public static String setAlarms(Context context) {
         cancelAlarms(context);
-
         List<AlarmItem> alarms = AlarmClockApplication.getDataSource().getAlarms();
         if (alarms != null) {
             for (AlarmItem alarm : alarms) {
@@ -44,9 +51,10 @@ public class AlarmManagerHelper extends BroadcastReceiver {
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(Calendar.HOUR_OF_DAY, alarm.getTimeHour());
                     calendar.set(Calendar.MINUTE, alarm.getTimeMinute());
-                    calendar.set(Calendar.SECOND, 00);
+                    calendar.set(Calendar.SECOND, 0);
                     boolean alarmSet = false;
-                    if (!calendar.after(Calendar.getInstance())) calendar.add(Calendar.DATE, 1);
+                    if (!calendar.after(Calendar.getInstance()))
+                        calendar.add(Calendar.DATE, 1);
                     while (!alarmSet) {
                         for (int i = 0; i <= 6; i++) {
                             if (alarm.getDay(calendar.get(Calendar.DAY_OF_WEEK) - 1)) {
@@ -57,16 +65,68 @@ public class AlarmManagerHelper extends BroadcastReceiver {
                     }
 
                     Calendar today = Calendar.getInstance();
-                    long diffInMillisec = calendar.getTimeInMillis() - today.getTimeInMillis();//result in millis
+
                     if (timeToNext == null || calendar.getTimeInMillis() < timeToNext.getTimeInMillis()) {
                         timeToNext = calendar;
+                        setNotification(context);
                     }
                 }
             }
+
+        }
+        if(timeToNext==null)cancelNotification();
+        return null;
+    }
+private static void setNotification(Context context){
+    Notification.Builder builder = new Notification.Builder(context);
+    builder.setContentIntent(PendingIntent.getActivity(context,
+            0, new Intent(context, MainActivity.class),
+            PendingIntent.FLAG_CANCEL_CURRENT))
+            .setSmallIcon(R.drawable.application_image)
+            // большая картинка
+            .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.alarm1))
+            //.setTicker(res.getString(R.string.warning)) // текст в строке состояния
+            .setWhen(System.currentTimeMillis())
+            //.setContentTitle(res.getString(R.string.notifytitle)) // Заголовок уведомления
+            .setContentTitle("Будильник установлен")
+            .setPriority(Notification.PRIORITY_HIGH)
+            //.setContentText(res.getString(R.string.notifytext))
+            .setContentText(String.format(context.getString(R.string.notification), calendarDay(context,timeToNext.get(Calendar.DAY_OF_WEEK)), timeToNext.get(Calendar.HOUR_OF_DAY), timeToNext.get(Calendar.MINUTE))); // Текст уведомления
+   final Notification notification = builder.build();
+    notificationManager = (NotificationManager) context
+            .getSystemService(Context.NOTIFICATION_SERVICE);
+    notification.flags|= Notification.FLAG_NO_CLEAR;
+    new Thread(new Runnable() {
+        @Override
+        public void run() {
+
+            notificationManager.notify(1, notification);
+        }
+    }).start();
+}
+    private static  String calendarDay(Context context,int day) {
+        switch (day) {
+            case 1:
+                return context.getString(R.string.sunday);
+            case 2:
+                return context.getString(R.string.monday);//TODO
+            case 3:
+                return context.getString(R.string.tuesday);
+            case 4:
+                return context.getString(R.string.wednesday);
+            case 5:
+                return context.getString(R.string.thursday);
+            case 6:
+                return context.getString(R.string.friday);
+            case 7:
+                return context.getString(R.string.saturday);
         }
         return null;
     }
-
+    public static void cancelNotification(){
+        if(notificationManager!=null)
+        notificationManager.cancel(1);
+    }
     public static String setAlarms(Context context, long id) {
         cancelAlarms(context);
 
@@ -82,13 +142,17 @@ public class AlarmManagerHelper extends BroadcastReceiver {
                 calendar.set(Calendar.MINUTE, alarm.getTimeMinute());
                 calendar.set(Calendar.SECOND, 00);
                 boolean alarmSet = false;
-                if (!calendar.after(Calendar.getInstance())) calendar.add(Calendar.DATE, 1);
+                if (!calendar.after(Calendar.getInstance())){
+                    calendar.add(Calendar.DATE, 1);
+                }
                 while (!alarmSet) {
                     for (int i = 0; i <= 6; i++) {
                         if (alarm.getDay(calendar.get(Calendar.DAY_OF_WEEK) - 1)) {
                             setAlarm(context, calendar, pIntent);
                             alarmSet = true;
-                        } else calendar.add(Calendar.DATE, 1);
+                            break;
+                        }
+                        else calendar.add(Calendar.DATE, 1);
                     }
                 }
 
@@ -100,9 +164,11 @@ public class AlarmManagerHelper extends BroadcastReceiver {
                 }
                 if (timeToNext == null || calendar.getTimeInMillis() < timeToNext.getTimeInMillis()) {
                     timeToNext = calendar;
+                    setNotification(context);
                 }
             }
         }
+        if(timeToNext==null)cancelNotification();
         return str;//"seconds minutes hours days" invert
     }
 
@@ -117,9 +183,9 @@ public class AlarmManagerHelper extends BroadcastReceiver {
         diffInSec /= 24;
         long days = diffInSec;
         sb.append(seconds);
-        if (minutes != 0) sb.append(" ").append(minutes);
-        if (hours != 0) sb.append(" ").append(hours);
-        if (days != 0) sb.append(" ").append(days);
+         sb.append(" ").append(minutes);
+         sb.append(" ").append(hours);
+         sb.append(" ").append(days);
         return sb.toString();
     }
 

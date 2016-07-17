@@ -1,15 +1,12 @@
-package com.me.ilya.smartalarmclock;
+package com.me.ilya.smartalarmclock.data;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by Ilya on 7/1/2016.
@@ -66,7 +63,7 @@ public class AlarmDBHelper extends SQLiteOpenHelper implements DataSource {
         }
         values.put(AlarmItem.COLUMN_NAMES[5], repeatingDays);
         values.put(AlarmItem.COLUMN_NAMES[6], alarmItem.isEnabled());
-        values.put(AlarmItem.COLUMN_NAMES[7],Boolean.FALSE.toString(alarmItem.isTone()));
+        values.put(AlarmItem.COLUMN_NAMES[7],Boolean.toString(alarmItem.isTone()));
         return values;
     }
 

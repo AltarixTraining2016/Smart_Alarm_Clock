@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Checkable;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
@@ -16,7 +17,7 @@ import com.me.ilya.smartalarmclock.R;
 /**
  * Created by Ilya on 6/24/2016.
  */
-public class DaySwitcher  extends ImageView implements Checkable, View.OnClickListener {
+public class DaySwitcher  extends Button implements Checkable, View.OnClickListener {
     private boolean mChecked;
 
     private static final int[] CHECKED_STATE_SET = { android.R.attr.state_checked };

@@ -36,6 +36,16 @@ public class SongListActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_ALARM_ID, deviceId);
         return intent;
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(SongListAdapter.ViewHolder.getMpintro() !=null&& SongListAdapter.ViewHolder.getMpintro() .isPlaying()){
+            SongListAdapter.ViewHolder.getMpintro().stop();
+            SongListAdapter.ViewHolder.getMpintro() .release();
+            SongListAdapter.ViewHolder.setMpintro(null);}
+    }
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);

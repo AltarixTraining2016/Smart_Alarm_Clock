@@ -6,6 +6,6 @@
         android:drawable="@color/item_focused"/>
 
 
-    <item android:drawable="@color/font_color"/> <!-- default -->
+    <item android:drawable="@color/white_font"/> <!-- default -->
 
 </selector>

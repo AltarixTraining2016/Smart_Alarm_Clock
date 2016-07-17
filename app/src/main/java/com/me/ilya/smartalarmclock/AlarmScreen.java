@@ -1,10 +1,14 @@
 package com.me.ilya.smartalarmclock;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -13,6 +17,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.me.ilya.smartalarmclock.main.MainActivity;
+import com.me.ilya.smartalarmclock.manager.AlarmManagerHelper;
+
+import java.util.Calendar;
 
 /**
  * Created by Ilya on 6/26/2016.
@@ -23,7 +32,7 @@ public class AlarmScreen extends Activity {
 
     private PowerManager.WakeLock mWakeLock;
     private MediaPlayer mPlayer;
-
+    NotificationManager notificationManager;
     private static final int WAKELOCK_TIMEOUT = 60 * 1000;
 
     @Override
@@ -42,7 +51,7 @@ public class AlarmScreen extends Activity {
         tvName.setText(name);
 
         TextView tvTime = (TextView) findViewById(R.id.alarm_screen_time);
-        tvTime.setText(String.format("%02d : %02d", timeHour, timeMinute));
+        tvTime.setText(String.format(getString(R.string.alarm_time), timeHour, timeMinute));
 
         Button dismissButton = (Button) findViewById(R.id.stop_playing);
         dismissButton.setOnClickListener(new View.OnClickListener() {
@@ -52,24 +61,27 @@ public class AlarmScreen extends Activity {
                 mPlayer.stop();
                 mPlayer.release();
                 finish();
+
+                notificationManager.cancel(getIntent().getIntExtra(AlarmManagerHelper.ID, 0));
             }
         });
-
         //Play alarm tone
         mPlayer = new MediaPlayer();
         try {
             if (tone != null && !tone.equals("")) {
-                    mPlayer.setDataSource(tone);
-             //       mPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-                    mPlayer.setLooping(true);
-                    mPlayer.prepare();
-                    mPlayer.start();
-                }
+                mPlayer.setDataSource(tone);
+                //       mPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+                mPlayer.setLooping(true);
+                mPlayer.prepare();
+                mPlayer.start();
+
+                AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+                audio.setStreamVolume(AudioManager.STREAM_MUSIC, audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         //Ensure wakelock release
         Runnable releaseWakelock = new Runnable() {
 
@@ -86,6 +98,25 @@ public class AlarmScreen extends Activity {
             }
         };
         new Handler().postDelayed(releaseWakelock, WAKELOCK_TIMEOUT);
+        Context context = getApplicationContext();
+        Notification.Builder builder = new Notification.Builder(context);
+        Intent intent = new Intent(context, AlarmScreen.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        builder.setContentIntent(PendingIntent.getActivity(context,
+                0, intent,
+                PendingIntent.FLAG_CANCEL_CURRENT))
+                .setSmallIcon(R.drawable.application_image)
+                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.application_image))
+                .setWhen(System.currentTimeMillis())
+                .setContentTitle("♪ Будильник ♪")
+                .setPriority(Notification.PRIORITY_HIGH)
+                .setContentText("Выберите для перехода к будильнику"); // Текст уведомления
+        final Notification notification = builder.build();
+        notificationManager = (NotificationManager) context
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        notification.flags |= Notification.FLAG_NO_CLEAR;
+        notificationManager.notify(getIntent().getIntExtra(AlarmManagerHelper.ID, 0), notification);
     }
 
     @SuppressWarnings("deprecation")
@@ -113,9 +144,14 @@ public class AlarmScreen extends Activity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        notificationManager.cancel(getIntent().getIntExtra(AlarmManagerHelper.ID, 0));
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
-
         if (mWakeLock != null && mWakeLock.isHeld()) {
             mWakeLock.release();
         }

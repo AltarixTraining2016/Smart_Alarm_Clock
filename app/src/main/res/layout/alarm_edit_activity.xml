@@ -18,11 +18,15 @@
         android:layout_height="wrap_content">
         <ImageView
 
+
+            android:background="@drawable/edit_buttons_background"
             android:id="@+id/cancel_button"
             android:layout_toStartOf="@+id/slice"
             android:layout_width="match_parent"
             android:layout_height="50dp" />
         <TextView
+android:textSize="20sp"
+            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/accept_button"
@@ -32,17 +36,18 @@
             android:layout_margin="1dp"
             android:gravity="center"
             android:text="Готово"
-            android:textColor="@color/font_color" />
+            android:textColor="@color/white_font" />
         <ImageView
-
+            android:background="@drawable/edit_buttons_background"
             android:id="@+id/accept_button"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_toEndOf="@+id/slice"/>
         <TextView
+            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:textSize="20sp"
             android:layout_alignStart="@+id/cancel_button"
             android:layout_alignTop="@+id/cancel_button"
             android:layout_alignEnd="@+id/cancel_button"
@@ -50,7 +55,7 @@
             android:layout_margin="1dp"
             android:gravity="center"
             android:text="Отмена"
-            android:textColor="@color/font_color" />
+            android:textColor="@color/white_font" />
         <ImageView
 android:src="@drawable/white_line"
             android:id="@+id/slice"
@@ -78,21 +83,22 @@ android:background="#85c1c4f7"
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/alarm_name_wrapper"
-        android:textColorHint="@color/font_color"
+        android:textColorHint="@color/white_font"
         android:layout_width="match_parent"
-        android:layout_below="@+id/chk_mond"
+        android:layout_below="@+id/day_box"
         android:layout_height="wrap_content">
 
         <android.support.design.widget.TextInputEditText
             android:layout_marginStart="10dp"
+
             android:id="@+id/alarm_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Название будильника"
             android:imeOptions="actionDone"
             android:inputType="text"
-            android:textColorHint="@color/font_color"
-            android:textColor="@color/font_color"
+            android:textColorHint="@color/white_font"
+            android:textColor="@color/white_font"
             android:maxLines="1" />
 
     </android.support.design.widget.TextInputLayout>
@@ -115,17 +121,21 @@ android:background="#85c1c4f7"
         android:layout_margin="1dp"
         android:gravity="center"
         android:text="Выбрать музыку"
-        android:textColor="@color/font_color" />
+        android:textColor="@color/white_font" />
     <Button
+
+        android:background="@drawable/edit_buttons_background"
+        android:layout_marginStart="10dp"
         android:id="@+id/signal_button"
         android:layout_below="@+id/song_list"
         android:layout_width="match_parent"
         android:layout_toStartOf="@+id/signal_radio_button"
-        android:background="@color/transparent"
 
         android:layout_height="match_parent" />
     <RadioButton
         android:layout_width="40dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
         android:layout_below="@+id/song_list"
         android:id="@+id/signal_radio_button"
         android:layout_alignParentEnd="true"
@@ -135,29 +145,35 @@ android:background="#85c1c4f7"
         android:textSize="25dp"
         android:text="Сигнал"
         android:layout_alignTop="@+id/signal_button"
-        android:textColor="@color/font_color"
+        android:textColor="@color/white_font"
+        android:layout_alignStart="@+id/signal_button"
         android:layout_alignEnd="@+id/signal_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
     <TextView
         android:text="signal_name"
+        android:layout_alignStart="@+id/signal_button"
         android:layout_alignBottom="@+id/signal_button"
         android:id="@+id/edit_signal_name"
-        android:textColor="@color/font_color"
+        android:textColor="@color/white_font"
         android:layout_alignEnd="@+id/signal_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
     <Button
+        android:layout_marginStart="10dp"
         android:id="@+id/song_button"
+
         android:layout_below="@+id/signal_button"
         android:layout_width="match_parent"
         android:layout_toStartOf="@+id/signal_radio_button"
-        android:background="@color/transparent"
+
+        android:background="@drawable/edit_buttons_background"
 
         android:layout_height="match_parent" />
     <RadioButton
+        android:layout_marginEnd="10dp"
         android:layout_width="40dp"
         android:layout_alignTop="@+id/song_button"
         android:id="@+id/song_radio_button"
@@ -165,164 +181,104 @@ android:background="#85c1c4f7"
         android:layout_alignBottom="@id/song_button"
         android:layout_height="40dp" />
     <TextView
+        android:layout_alignStart="@+id/song_button"
         android:textSize="25dp"
         android:text="С устройства"
         android:layout_alignTop="@+id/song_button"
-        android:textColor="@color/font_color"
+        android:textColor="@color/white_font"
         android:layout_alignEnd="@+id/song_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
     <TextView
+        android:layout_alignStart="@id/song_button"
         android:text="song_name"
         android:layout_alignBottom="@+id/song_button"
         android:id="@+id/edit_song_name"
-        android:textColor="@color/font_color"
+        android:textColor="@color/white_font"
         android:layout_alignEnd="@+id/song_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:id="@+id/day_box"
+        android:layout_below="@+id/time_background"
+        android:layout_width="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
         <com.me.ilya.smartalarmclock.DaySwitcher
 
             android:layout_below="@id/time_background"
             android:id="@+id/chk_mond"
             android:background="@drawable/day_check_item"
-            android:layout_width="60dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_marginStart="10dp"
 
             android:layout_height="60dp" />
 
-    <TextView
-        android:id="@+id/monday_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@id/chk_mond"
-        android:layout_alignTop="@id/chk_mond"
-        android:layout_alignEnd="@id/chk_mond"
-        android:layout_alignBottom="@id/chk_mond"
-        android:layout_margin="1dp"
-        android:gravity="center"
-        android:text="Пн"
-        android:textColor="@color/black" />
     <com.me.ilya.smartalarmclock.DaySwitcher
         android:id="@+id/chk_tue"
         android:layout_below="@id/time_background"
         android:layout_toEndOf="@+id/chk_mond"
         android:background="@drawable/day_check_item"
         android:layout_marginStart="10dp"
-        android:layout_width="60dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"
         android:layout_height="60dp" />
-    <TextView
-        android:id="@+id/tuesdau_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@id/chk_tue"
-        android:layout_alignTop="@id/chk_tue"
-        android:layout_alignEnd="@id/chk_tue"
-        android:layout_alignBottom="@id/chk_tue"
-        android:layout_margin="1dp"
-        android:gravity="center"
-        android:text="Вт"
-        android:textColor="@color/black" />
+
     <com.me.ilya.smartalarmclock.DaySwitcher
         android:id="@+id/chk_wed"
         android:layout_below="@id/time_background"
         android:layout_toEndOf="@+id/chk_tue"
         android:background="@drawable/day_check_item"
-        android:layout_width="60dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"
         android:layout_marginStart="10dp"
         android:layout_height="60dp"/>
-    <TextView
-        android:id="@+id/wednesday_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@id/chk_wed"
-          android:layout_alignTop="@id/chk_wed"
-          android:layout_alignEnd="@id/chk_wed"
-       android:layout_alignBottom="@id/chk_wed"
-        android:layout_margin="1dp"
-        android:gravity="center"
-        android:text="Ср"
-        android:textColor="@color/black" />
+
     <com.me.ilya.smartalarmclock.DaySwitcher
         android:id="@+id/chk_thur"
         android:layout_below="@id/time_background"
         android:layout_toEndOf="@+id/chk_wed"
         android:layout_marginStart="10dp"
         android:background="@drawable/day_check_item"
-        android:layout_width="60dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"
         android:layout_height="60dp"/>
-    <TextView
-        android:id="@+id/thursday_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-         android:layout_alignStart="@id/chk_thur"
-           android:layout_alignTop="@id/chk_thur"
-           android:layout_alignEnd="@id/chk_thur"
-        android:layout_alignBottom="@id/chk_thur"
-        android:layout_margin="1dp"
-        android:gravity="center"
-        android:text="Чт"
-        android:textColor="@color/black" />
+
     <com.me.ilya.smartalarmclock.DaySwitcher
         android:id="@+id/chk_frid"
         android:layout_marginStart="10dp"
         android:layout_below="@id/time_background"
         android:layout_toEndOf="@+id/chk_thur"
         android:background="@drawable/day_check_item"
-        android:layout_width="60dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"
         android:layout_height="60dp" />
-    <TextView
-        android:id="@+id/friday_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@id/chk_frid"
-        android:layout_alignTop="@id/chk_frid"
-        android:layout_alignEnd="@id/chk_frid"
-        android:layout_alignBottom="@id/chk_frid"
-        android:layout_margin="1dp"
-        android:gravity="center"
-        android:text="Пт"
-        android:textColor="@color/black" />
+
     <com.me.ilya.smartalarmclock.DaySwitcher
         android:id="@+id/chk_sat"
         android:layout_marginStart="10dp"
         android:layout_below="@id/time_background"
         android:layout_toEndOf="@+id/chk_frid"
         android:background="@drawable/day_check_item"
-        android:layout_width="60dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"
         android:layout_height="60dp"/>
-    <TextView
-        android:id="@+id/saturday_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@id/chk_sat"
-        android:layout_alignTop="@id/chk_sat"
-        android:layout_alignEnd="@id/chk_sat"
-        android:layout_alignBottom="@id/chk_sat"
-        android:layout_margin="1dp"
-        android:gravity="center"
-        android:text="Сб"
-        android:textColor="@color/black" />
+
     <com.me.ilya.smartalarmclock.DaySwitcher
         android:id="@+id/chk_sun"
         android:layout_below="@id/time_background"
         android:layout_toEndOf="@+id/chk_sat"
         android:background="@drawable/day_check_item"
         android:layout_marginStart="10dp"
-        android:layout_width="60dp"
+        android:layout_weight="1"
+        android:layout_width="0dp"
         android:layout_height="60dp" />
-    <TextView
-        android:id="@+id/sunday_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@id/chk_sun"
-        android:layout_alignTop="@id/chk_sun"
-        android:layout_alignEnd="@id/chk_sun"
-        android:layout_alignBottom="@id/chk_sun"
-        android:layout_margin="1dp"
-        android:gravity="center"
-        android:text="Вс"
-        android:textColor="@color/black" />
 
+    </LinearLayout>
 </RelativeLayout></ScrollView>

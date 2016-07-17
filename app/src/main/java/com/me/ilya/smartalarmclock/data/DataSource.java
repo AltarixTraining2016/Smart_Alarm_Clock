@@ -1,8 +1,6 @@
-package com.me.ilya.smartalarmclock;
+package com.me.ilya.smartalarmclock.data;
 
 import android.database.Cursor;
-
-import com.me.ilya.smartalarmclock.music.Song;
 
 import java.util.ArrayList;
 

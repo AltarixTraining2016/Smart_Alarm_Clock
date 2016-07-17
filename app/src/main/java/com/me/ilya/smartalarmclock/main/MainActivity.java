@@ -13,11 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-import com.me.ilya.smartalarmclock.AlarmItem;
-import com.me.ilya.smartalarmclock.AlarmManagerHelper;
+import com.me.ilya.smartalarmclock.data.AlarmItem;
+import com.me.ilya.smartalarmclock.manager.AlarmManagerHelper;
 import com.me.ilya.smartalarmclock.R;
 import com.me.ilya.smartalarmclock.Titleable;
-import com.me.ilya.smartalarmclock.main.AlarmListFragment;
 
 import java.util.List;
 

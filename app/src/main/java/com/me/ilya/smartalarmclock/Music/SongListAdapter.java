@@ -12,7 +12,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.me.ilya.smartalarmclock.main.AlarmClockApplication;
-import com.me.ilya.smartalarmclock.AlarmItem;
+import com.me.ilya.smartalarmclock.data.AlarmItem;
 import com.me.ilya.smartalarmclock.R;
 
 import java.io.IOException;
@@ -62,6 +62,15 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
         public TextView txtViewName;
         public TextView tvLength;
         public RadioButton radioButton;
+
+        public static MediaPlayer getMpintro() {
+            return mpintro;
+        }
+
+        public static void setMpintro(MediaPlayer mpintro) {
+            ViewHolder.mpintro = mpintro;
+        }
+
         private void process(final Context context) {
             radioButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -73,10 +82,6 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
                             AlarmClockApplication.getDataSource().alarmItemChange(newAlarm);
                         }
                     }
-                    if(mpintro!=null&& mpintro.isPlaying()){
-                        mpintro.stop();
-                        mpintro.release();
-                    mpintro=null;}
                     Intent intent=new Intent();
                     intent.putExtra("song",song.getUri());
                     mActivity.setResult(Activity.RESULT_OK,intent);
@@ -114,6 +119,7 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
             this.song = song;
             process(context);
         }
+
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             txtViewName = (TextView) itemLayoutView.findViewById(R.id.song_name);

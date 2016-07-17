@@ -2,16 +2,15 @@ package com.me.ilya.smartalarmclock.music;
 
 import android.database.Cursor;
 import android.database.MatrixCursor;
-import android.net.Uri;
 
-import com.me.ilya.smartalarmclock.Dto;
+import com.me.ilya.smartalarmclock.data.Dto;
 
 /**
  * Created by Ilya on 6/22/2016.
  */
 public class Song extends Dto{
   public   static final String DEFAULT_TITLE="Default";
-    public static final String DEFAULT_URI="content://media/internal/audio/media/10";
+    public static  String DEFAULT_URI="content://media/internal/audio/media/10";
     static final String _ID = "_id";
     static final String TITLE = "title";
     static final String PATH= "path";
@@ -44,6 +43,9 @@ public class Song extends Dto{
         title=songTitle;
         length=songLength;
         this.uri=uri;
+    }
+    public static void setDefaultUri(String str){
+        DEFAULT_URI=str;
     }
     public Song(long songID, String songTitle, String uri) {
         id=songID;
